@@ -1,9 +1,8 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import { Button, Stack, Typography } from "@mui/material";
 import Cookies from "js-cookie";
-import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../services/AuthContext";
-import LoginModal from "./LoginModal";
+import { useAuth } from "../../services/AuthContext";
+import LoginModal from "../login/LoginModal";
 
 function UserStatus() {
     let auth = useAuth();

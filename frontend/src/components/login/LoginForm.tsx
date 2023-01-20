@@ -1,11 +1,11 @@
-import React, { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { UserLoginDetails } from "../types/User";
-import { useAuth } from "../services/AuthContext";
-import AuthService from "../services/AuthService";
-import { LoginState } from "../types/LoginState";
-import { Button, Checkbox, FormControlLabel, Link, TextField, Typography } from "@mui/material";
-import theme from "../theme";
+import { Button, Link, TextField, Typography } from "@mui/material";
+import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../services/AuthContext";
+import AuthService from "../../services/AuthService";
+import theme from "../../theme";
+import { LoginState } from "../../types/LoginState";
+import { UserLoginDetails } from "../../types/User";
 
 const initialState: LoginState = {
     username: "",

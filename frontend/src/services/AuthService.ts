@@ -1,4 +1,3 @@
-import { AuthResponse } from "../types/ApiResponses";
 import { UserLoginDetails } from "../types/User";
 
 const loginApi = async (userDetails: UserLoginDetails) => {

@@ -1,10 +1,10 @@
 import { Container } from '@mui/material';
 import React, { FormEventHandler } from 'react';
 import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
-import Header from './components/Header';
+import Header from './components/header/Header';
 import CreateNewThread from './pages/CreateNewThread';
 import Landing from './pages/Landing';
-import LoginForm from './components/LoginForm';
+import LoginForm from './components/login/LoginForm';
 import { AuthProvider, RequireAuth } from './services/AuthProvider';
 
 const App: React.FC = () => {

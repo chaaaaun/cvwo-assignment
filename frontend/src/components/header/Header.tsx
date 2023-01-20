@@ -1,10 +1,9 @@
-import { Box, Grid, IconButton, InputAdornment, TextField, Typography } from "@mui/material";
-import SearchIcon from '@mui/icons-material/Search';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import UserStatus from "./UserStatus";
-import theme from "../theme";
+import SearchIcon from '@mui/icons-material/Search';
+import { IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { Link } from "react-router-dom";
+import UserStatus from "./UserStatus";
 
 function Header() {
     return (
