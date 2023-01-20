@@ -13,7 +13,7 @@ import (
 func GetNoAuthRoutes() func(r chi.Router) {
 	return func(r chi.Router) {
 		r.Get("/", func(w http.ResponseWriter, req *http.Request) {
-			w.Write([]byte("root."))
+			println("root.")
 		})
 
 		r.Post("/login", func(w http.ResponseWriter, req *http.Request) {
@@ -29,11 +29,23 @@ func GetNoAuthRoutes() func(r chi.Router) {
 				return
 			}
 
-			fmt.Printf(data.Password)
+			fmt.Printf("user logged in")
 		})
 
 		r.Post("/register", func(w http.ResponseWriter, req *http.Request) {
-			w.Write([]byte("register."))
+			payload, err := ioutil.ReadAll(req.Body)
+			if err != nil {
+				fmt.Println("JSON decode error!")
+				return
+			}
+
+			data := &models.LoginRequest{}
+			if err := json.Unmarshal(payload, &data); err != nil {
+				fmt.Println("JSON decode error!")
+				return
+			}
+
+			fmt.Printf("user registered")
 		})
 	}
 }
