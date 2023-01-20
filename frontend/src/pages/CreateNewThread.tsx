@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import React from 'react';
+import ThreadForm from '../components/forms/ThreadForm';
 
 function CreateNewThread() {
     return (
@@ -8,10 +9,11 @@ function CreateNewThread() {
             alignItems: "center",
             backgroundColor: "#ffffff0d",
             borderRadius: "10px",
-            padding: "10px"
+            padding: "20px"
         }}>
             
             <Typography variant='h4'>Create new thread</Typography>
+            <ThreadForm />
         </Box>
     );
 };

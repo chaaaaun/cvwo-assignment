@@ -3,3 +3,9 @@ export type LoginState = {
     password: string;
     isLogin: boolean;
 };
+
+export type ThreadState = {
+    title: string;
+    content: string;
+    tags: string;
+}

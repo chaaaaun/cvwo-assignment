@@ -1,4 +1,4 @@
-import { UserLoginDetails } from "../types/User";
+import { UserLoginDetails } from "../types/DataModels";
 
 const loginApi = async (userDetails: UserLoginDetails) => {
     let res = await fetch("/login", {

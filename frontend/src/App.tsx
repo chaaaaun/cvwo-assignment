@@ -7,7 +7,7 @@ import Landing from './pages/Landing';
 import LoginForm from './components/login/LoginForm';
 import { AuthProvider, RequireAuth } from './services/AuthProvider';
 
-const App: React.FC = () => {
+function App() {
     return (
         <Container maxWidth="lg">
             <AuthProvider>

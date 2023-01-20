@@ -4,8 +4,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/AuthContext";
 import AuthService from "../../services/AuthService";
 import theme from "../../theme";
-import { LoginState } from "../../types/LoginState";
-import { UserLoginDetails } from "../../types/User";
+import { LoginState } from "../../types/FormStates";
+import { UserLoginDetails } from "../../types/DataModels";
 
 const initialState: LoginState = {
     username: "",
@@ -103,24 +103,5 @@ export default function LoginForm() {
                     : <Typography variant="body1">Already registered? <Link onClick={onLoginToggle}>Log In</Link></Typography>
             }
         </form>
-        // <form onSubmit={handleSubmit}>
-        //     <input type="button" name="logreg" onClick={onLoginToggle} value={`${state.isLogin ? "Login" : "Register"}`} /><br />
-        //     <label>
-        //         username:
-        //         <input type="text" name="username" id="username" value={state.username} onChange={onUsernameChange} />
-        //     </label>
-        //     <br></br>
-        //     <label>
-        //         password:
-        //         <input type="password" name="password" id="password" value={state.password} onChange={onPasswordChange} />
-        //     </label><br />
-        //     {state.isLogin &&
-        //         <label>Remember me
-        //             <input type="button" name="rememberme" onClick={onRememberToggle} value={`${state.isRemember}`} />
-        //         </label>
-        //     }
-        //     <br />
-        //     <input type="submit" value="Submit" />
-        // </form>
     );
 }

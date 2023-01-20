@@ -1,5 +1,5 @@
 import React from "react";
-import { UserLoginDetails } from "../types/User";
+import { UserLoginDetails } from "../types/DataModels";
 
 interface AuthContextType {
     user: string;

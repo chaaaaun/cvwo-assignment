@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Cookies from 'js-cookie';
 import { Navigate, useLocation } from "react-router-dom";
-import { UserLoginDetails } from "../types/User";
+import { UserLoginDetails } from "../types/DataModels";
 import { AuthContext } from "./AuthContext";
 import AuthService from "./AuthService";
 

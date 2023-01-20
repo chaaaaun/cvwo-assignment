@@ -8,21 +8,7 @@ function UserStatus() {
     let auth = useAuth();
     let navigate = useNavigate();
 
-    const checkJwt = () => {
-        let token = Cookies.get("jwt")
-        if (token !== undefined) {
-            fetch("/user", { credentials: "include" })
-                .then((response) => response.json())
-                .then((data) => {
-                    auth.setUser(data.user)
-                    navigate("/")
-                })
-                .catch(() => auth.logout(() => { }))
-        }
-    }
-
     if (!auth.user) {
-        // return <Button component={Link} to="/login" onClick={checkJwt}>Login</Button>
         return <LoginModal />
     } else {
         return (
