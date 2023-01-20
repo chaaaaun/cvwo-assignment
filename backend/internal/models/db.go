@@ -1,10 +1,12 @@
 package models
 
-import "net/http"
+import (
+	"net/http"
+)
 
 type User struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
+	Username string `gorm:"primaryKey"`
+	Password string
 }
 
 func (a *User) Bind(r *http.Request) error {

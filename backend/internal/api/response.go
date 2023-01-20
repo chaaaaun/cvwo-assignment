@@ -11,6 +11,10 @@ type Response struct {
 	ErrorCode int      `json:"errorCode"`
 }
 
+type AuthResponse struct {
+	Token string `json:"token"`
+}
+
 type ErrResponse struct {
 	Err            error `json:"-"` // low-level runtime error
 	HTTPStatusCode int   `json:"-"` // http response status code
