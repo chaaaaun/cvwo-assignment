@@ -32,7 +32,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Encrypt password
-	salted := []byte(data.Password + data.Username)
+	salted := []byte(data.Password + data.ID)
 	hashed, err := bcrypt.GenerateFromPassword(salted, passwordCost)
 	data.Password = string(hashed[:])
 
@@ -58,7 +58,7 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, api.ErrRender(err))
 		return
 	}
-	salted := []byte(data.Password + data.Username)
+	salted := []byte(data.Password + data.ID)
 
 	// Retreive user
 	user, err := dataaccess.DbReadUser(data)
@@ -75,7 +75,7 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Generate jwt
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"sub": user.Username,
+		"sub": user.ID,
 		"exp": time.Now().Add(jwtExpiration).Unix(),
 	})
 

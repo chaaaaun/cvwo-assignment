@@ -5,8 +5,10 @@ import (
 )
 
 type User struct {
-	Username string `gorm:"primaryKey"`
+	ID       string `gorm:"primaryKey"`
 	Password string
+	Threads  []Thread
+	Comments []Comment
 }
 
 func (a *User) Bind(r *http.Request) error {

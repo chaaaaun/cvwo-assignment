@@ -7,7 +7,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// Reusable EDb connection
+// Reusable DB connection
 var DB *gorm.DB
 
 func GetDB() error {

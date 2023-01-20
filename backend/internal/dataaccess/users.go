@@ -16,6 +16,6 @@ func DbCreateUser(user *models.User) error {
 }
 
 func DbReadUser(user *models.User) (*models.User, error) {
-	database.DB.First(&user, "username = ?", user.Username)
+	database.DB.First(&user, "username = ?", user.ID)
 	return user, nil
 }
