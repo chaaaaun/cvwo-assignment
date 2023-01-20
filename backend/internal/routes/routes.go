@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"github.com/chauuun/cvwo-assignment/backend/internal/handlers/users"
 	"github.com/chauuun/cvwo-assignment/backend/internal/models"
 	"github.com/go-chi/chi/v5"
 )
@@ -17,13 +18,15 @@ func GetNoAuthRoutes() func(r chi.Router) {
 		})
 
 		r.Post("/login", func(w http.ResponseWriter, req *http.Request) {
+			// Read payload body
 			payload, err := ioutil.ReadAll(req.Body)
 			if err != nil {
 				fmt.Println("JSON decode error!")
 				return
 			}
 
-			data := &models.LoginRequest{}
+			//
+			data := &models.User{}
 			if err := json.Unmarshal(payload, &data); err != nil {
 				fmt.Println("JSON decode error!")
 				return
@@ -32,20 +35,6 @@ func GetNoAuthRoutes() func(r chi.Router) {
 			fmt.Printf("user logged in")
 		})
 
-		r.Post("/register", func(w http.ResponseWriter, req *http.Request) {
-			payload, err := ioutil.ReadAll(req.Body)
-			if err != nil {
-				fmt.Println("JSON decode error!")
-				return
-			}
-
-			data := &models.LoginRequest{}
-			if err := json.Unmarshal(payload, &data); err != nil {
-				fmt.Println("JSON decode error!")
-				return
-			}
-
-			fmt.Printf("user registered")
-		})
+		r.Post("/register", users.CreateUser)
 	}
 }

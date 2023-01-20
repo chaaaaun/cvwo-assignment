@@ -16,6 +16,6 @@ func init() {
 }
 
 func main() {
-	db, _ := database.GetDB()
-	db.AutoMigrate(&models.User{})
+	database.GetDB()
+	database.DB.AutoMigrate(&models.User{})
 }

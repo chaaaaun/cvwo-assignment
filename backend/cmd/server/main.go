@@ -6,14 +6,18 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/chauuun/cvwo-assignment/backend/internal/database"
 	"github.com/chauuun/cvwo-assignment/backend/internal/router"
 	"github.com/joho/godotenv"
 )
 
 func init() {
-	err := godotenv.Load()
-	if err != nil {
+	if err := godotenv.Load(); err != nil {
 		log.Fatal("Error loading environment variables")
+	}
+
+	if err := database.GetDB(); err != nil {
+		log.Fatal("Error connecting to database")
 	}
 }
 
