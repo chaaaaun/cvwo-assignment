@@ -21,3 +21,11 @@ type ThreadRequest struct {
 func (a *ThreadRequest) Bind(r *http.Request) error {
 	return nil
 }
+
+type CommentRequest struct {
+	Content string `json:"content"`
+}
+
+func (a *CommentRequest) Bind(r *http.Request) error {
+	return nil
+}

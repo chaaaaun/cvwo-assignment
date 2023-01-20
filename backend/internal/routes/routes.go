@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/chauuun/cvwo-assignment/backend/internal/handlers/comments"
 	"github.com/chauuun/cvwo-assignment/backend/internal/handlers/threads"
 	"github.com/chauuun/cvwo-assignment/backend/internal/handlers/users"
 	"github.com/chauuun/cvwo-assignment/backend/internal/models"
@@ -26,6 +27,8 @@ func GetPublicRoutes() func(r chi.Router) {
 			r.Get("/", threads.ListThreads)         // GET /thread
 			r.Get("/search", threads.SearchThreads) // GET /thread/search
 		})
+
+		r.Get("/api/comment", comments.ListComments)
 	}
 }
 
@@ -51,6 +54,8 @@ func GetProtectedRoutes() func(r chi.Router) {
 				r.Get("/", threads.GetThread)       // GET /articles/123
 				r.Put("/", threads.UpdateThread)    // PUT /articles/123
 				r.Delete("/", threads.DeleteThread) // DELETE /articles/123
+
+				r.Post("/comment", comments.CreateComment) // POST /comment
 			})
 		})
 	}

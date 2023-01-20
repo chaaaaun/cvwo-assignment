@@ -18,24 +18,6 @@ func DbGetThread(id int) (*models.Thread, error) {
 	return &thread, nil
 }
 
-func DbCreateThread(threadData *api.ThreadRequest, user string) error {
-	var thread = &models.Thread{
-		Title:   threadData.Title,
-		Content: threadData.Content,
-		Tags:    threadData.Tags,
-		Likes:   0,
-		Views:   0,
-		UserID:  user,
-	}
-	result := database.DB.Create(&thread)
-
-	if result.Error != nil {
-		return result.Error
-	}
-
-	return nil
-}
-
 func DbListThreads(page int) (*[]models.Thread, int, error) {
 	var threads []models.Thread
 	// Get 10 entries with page offset
@@ -50,4 +32,30 @@ func DbListThreads(page int) (*[]models.Thread, int, error) {
 	totalPages := math.Ceil(float64(count) / float64(10))
 
 	return &threads, int(totalPages), nil
+}
+
+func DbCreateThread(threadData *api.ThreadRequest, user string) error {
+	var thread = &models.Thread{
+		Title:   threadData.Title,
+		Content: threadData.Content,
+		Tags:    threadData.Tags,
+		Likes:   0,
+		Views:   0,
+		UserID:  user,
+	}
+
+	if result := database.DB.Create(&thread); result.Error != nil {
+		return result.Error
+	}
+
+	return nil
+}
+
+func DbUpdateThread(newThreadData *api.ThreadRequest, thread *models.Thread) error {
+
+	if result := database.DB.Model(&thread).Updates(newThreadData); result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }

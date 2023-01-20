@@ -12,6 +12,11 @@ type ThreadResponse struct {
 	Payload  []models.Thread    `json:"data"`
 }
 
+type CommentResponse struct {
+	Metadata PaginationMetadata `json:"pagination"`
+	Payload  []models.Comment   `json:"data"`
+}
+
 type PaginationMetadata struct {
 	NextPage     int
 	PreviousPage int
@@ -36,6 +41,14 @@ type ErrResponse struct {
 func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	render.Status(r, e.HTTPStatusCode)
 	return nil
+}
+
+func ErrNotFound(err error) render.Renderer {
+	return &ErrResponse{
+		HTTPStatusCode: 404,
+		StatusText:     "Resource not found.",
+		ErrorText:      err.Error(),
+	}
 }
 
 func ErrBadRequest(err error) render.Renderer {

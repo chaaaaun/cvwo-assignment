@@ -13,9 +13,7 @@ import (
 	"github.com/go-chi/render"
 )
 
-var (
-	ErrNotFound = &api.ErrResponse{HTTPStatusCode: 404, StatusText: "Resource not found."}
-)
+var ()
 
 func ThreadCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -26,15 +24,15 @@ func ThreadCtx(next http.Handler) http.Handler {
 			// string to int
 			id, err := strconv.Atoi(threadID)
 			if err != nil {
-				render.Render(w, r, ErrNotFound)
+				render.Render(w, r, api.ErrNotFound(err))
 			}
 			thread, _ = dataaccess.DbGetThread(id)
 		} else {
-			render.Render(w, r, ErrNotFound)
+			render.Render(w, r, api.ErrNotFound(err))
 			return
 		}
 		if err != nil {
-			render.Render(w, r, ErrNotFound)
+			render.Render(w, r, api.ErrNotFound(err))
 			return
 		}
 
@@ -52,7 +50,7 @@ func ListThreads(w http.ResponseWriter, r *http.Request) {
 	if pageStr := chi.URLParam(r, "page"); pageStr != "" {
 		page, err = strconv.Atoi(pageStr)
 		if err != nil {
-			render.Render(w, r, ErrNotFound)
+			render.Render(w, r, api.ErrNotFound(err))
 		} else if page < 0 {
 			render.Render(w, r, api.ErrBadRequest(errors.New("page number cannot be negative")))
 		}

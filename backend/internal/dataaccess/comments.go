@@ -3,6 +3,7 @@ package dataaccess
 import (
 	"math"
 
+	"github.com/chauuun/cvwo-assignment/backend/internal/api"
 	"github.com/chauuun/cvwo-assignment/backend/internal/database"
 	"github.com/chauuun/cvwo-assignment/backend/internal/models"
 )
@@ -21,4 +22,18 @@ func DbListComments(page int) (*[]models.Comment, int, error) {
 	totalPages := math.Ceil(float64(count) / float64(10))
 
 	return &comments, int(totalPages), nil
+}
+
+func DbCreateComment(commentData *api.CommentRequest, threadId uint, user string) error {
+	var comment = &models.Comment{
+		Content:  commentData.Content,
+		ThreadID: threadId,
+		UserID:   user,
+	}
+
+	if result := database.DB.Create(&comment); result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
