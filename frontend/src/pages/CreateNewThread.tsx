@@ -1,9 +1,18 @@
-import { Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
 
 function CreateNewThread() {
     return (
-        <Typography variant='h3'>Create new thread</Typography>
+        <Box sx={{
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "#ffffff0d",
+            borderRadius: "10px",
+            padding: "10px"
+        }}>
+            
+            <Typography variant='h4'>Create new thread</Typography>
+        </Box>
     );
 };
 
