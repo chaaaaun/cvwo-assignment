@@ -5,7 +5,6 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -25,31 +24,30 @@ const (
 )
 
 func GetCurrentUser(w http.ResponseWriter, r *http.Request) {
-	token, _, _ := jwtauth.FromContext(r.Context())
-	render.JSON(w, r, &api.UserResponse{User: token.Subject()})
+	user := r.Context().Value(models.UserContextKey{}).(string)
+	render.JSON(w, r, &api.UserResponse{User: user})
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	// Bind request body
 	data := &models.User{}
 	if err := render.Bind(r, data); err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrBadRequest(err))
 		return
 	}
 
 	// Encrypt password
 	salted := []byte(data.Password + data.ID)
 	hashed, err := bcrypt.GenerateFromPassword(salted, passwordCost)
-	data.Password = string(hashed[:])
-
 	if err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrBadRequest(err))
 		return
 	}
+	data.Password = string(hashed[:])
 
 	// Create User
 	if err := dataaccess.DbCreateUser(data); err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
 
@@ -61,7 +59,7 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	// Bind request body
 	data := &models.User{}
 	if err := render.Bind(r, data); err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrBadRequest(err))
 		return
 	}
 	salted := []byte(data.Password + data.ID)
@@ -69,13 +67,13 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	// Retreive user
 	user, err := dataaccess.DbReadUser(data)
 	if err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
 
 	// Authenticate
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), salted); err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
 
@@ -89,7 +87,7 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 
 	if err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
 
@@ -104,15 +102,12 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	// Return success
 	render.Status(r, http.StatusOK)
 	http.SetCookie(w, &atCookie)
-	render.JSON(w, r, &api.AuthResponse{
-		Token: tokenString,
-	})
 }
 
 func UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
 	data := &api.ChangePasswordRequest{}
 	if err := render.Bind(r, data); err != nil {
-		render.Render(w, r, api.ErrRender(err))
+		render.Render(w, r, api.ErrBadRequest(err))
 		return
 	}
 }

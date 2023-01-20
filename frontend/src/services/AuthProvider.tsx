@@ -9,13 +9,11 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let [user, setUser] = React.useState<string>("");
 
     let login = (newUser: UserLoginDetails, callback: VoidFunction) => {
-        try {
             AuthService.loginApi(newUser)
-            setUser(newUser.username)
-            callback();
-        } catch (error) {
-            console.error(error)
-        }
+            .then(() => {
+                setUser(newUser.id);
+                callback();
+            }).catch(err => { throw err })
     };
 
     let logout = (callback: VoidFunction) => {

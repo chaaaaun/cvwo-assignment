@@ -1,5 +1,5 @@
 export type UserLoginDetails = {
-    username: string;
+    id: string;
     password: string;
     isRemember: boolean;
 }

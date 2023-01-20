@@ -7,8 +7,8 @@ import (
 )
 
 type Response struct {
-	Payload   []string `json:"payload"`
-	ErrorCode int      `json:"errorCode"`
+	Metadata string   `json:"metadata,omitempty"`
+	Payload  []string `json:"data"`
 }
 
 type AuthResponse struct {
@@ -20,12 +20,9 @@ type UserResponse struct {
 }
 
 type ErrResponse struct {
-	Err            error `json:"-"` // low-level runtime error
-	HTTPStatusCode int   `json:"-"` // http response status code
-
-	StatusText string `json:"status"`          // user-level status message
-	AppCode    int64  `json:"code,omitempty"`  // application-specific error code
-	ErrorText  string `json:"error,omitempty"` // application-level error message, for debugging
+	HTTPStatusCode int    `json:"statusCode"`              // http response status code
+	StatusText     string `json:"statusMessage,omitempty"` // user-level status message
+	ErrorText      string `json:"errorMessage,omitempty"`  // application-level error message
 }
 
 func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
@@ -33,11 +30,18 @@ func (e *ErrResponse) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func ErrRender(err error) render.Renderer {
+func ErrBadRequest(err error) render.Renderer {
 	return &ErrResponse{
-		Err:            err,
+		HTTPStatusCode: 400,
+		StatusText:     "Error invalid request.",
+		ErrorText:      err.Error(),
+	}
+}
+
+func ErrUnprocessable(err error) render.Renderer {
+	return &ErrResponse{
 		HTTPStatusCode: 422,
-		StatusText:     "Error rendering response.",
+		StatusText:     "Error processing request.",
 		ErrorText:      err.Error(),
 	}
 }

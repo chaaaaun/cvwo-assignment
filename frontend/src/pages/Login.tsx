@@ -61,7 +61,7 @@ function Login() {
         event.preventDefault();
 
         const user: UserLoginDetails = {
-            username: state.username,
+            id: state.username,
             password: state.password,
             isRemember: state.isRemember
         }

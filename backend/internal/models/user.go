@@ -22,3 +22,5 @@ func (a *User) Bind(r *http.Request) error {
 func (a *User) Render(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
+
+type UserContextKey struct{}

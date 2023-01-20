@@ -1,20 +1,16 @@
+import { AuthResponse } from "../types/ApiResponses";
 import { UserLoginDetails } from "../types/User";
 
-const loginApi = (userDetails: UserLoginDetails) => {
-    fetch("/login", {
+const loginApi = async (userDetails: UserLoginDetails) => {
+    let res = await fetch("/login", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(userDetails),
     })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log('Success:', data);
-        })
-        .catch((error) => {
-            throw error;
-        });
+    if (!res.ok) { throw new Error(res.statusText) }
+    return;
 }
 
 const registerApi = (userDetails: UserLoginDetails) => {
