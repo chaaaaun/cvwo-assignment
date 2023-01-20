@@ -5,7 +5,7 @@ import { useAuth } from "../../services/AuthContext";
 import AuthService from "../../services/AuthService";
 import theme from "../../theme";
 import { LoginState } from "../../types/FormStates";
-import { UserLoginDetails } from "../../types/DataModels";
+import { UserLoginRequest } from "../../types/ApiRequest";
 
 const initialState: LoginState = {
     username: "",
@@ -59,7 +59,7 @@ export default function LoginForm() {
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
 
-        const user: UserLoginDetails = {
+        const user: UserLoginRequest = {
             id: state.username,
             password: state.password
         }

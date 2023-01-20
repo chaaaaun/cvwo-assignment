@@ -21,6 +21,11 @@ func GetPublicRoutes() func(r chi.Router) {
 
 		r.Post("/login", users.AuthenticateUser)
 		r.Post("/register", users.CreateUser)
+
+		r.Route("/api/thread", func(r chi.Router) {
+			r.Get("/", threads.ListThreads)         // GET /thread
+			r.Get("/search", threads.SearchThreads) // GET /thread/search
+		})
 	}
 }
 
@@ -37,10 +42,8 @@ func GetProtectedRoutes() func(r chi.Router) {
 		r.Post("/user", users.UpdateUserPassword)
 
 		// Thread CRUD
-		r.Route("/api/thread", func(r chi.Router) {
-			r.Get("/", threads.ListThreads)         // GET /thread
-			r.Post("/", threads.CreateThread)       // POST /thread
-			r.Get("/search", threads.SearchThreads) // GET /thread/search
+		r.Route("/api/auth/thread", func(r chi.Router) {
+			r.Post("/", threads.CreateThread) // POST /thread
 
 			// Subrouters:
 			r.Route("/{threadID}", func(r chi.Router) {

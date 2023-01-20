@@ -1,10 +1,13 @@
-export type UserLoginDetails = {
-    id: string;
-    password: string;
-}
-
-export type ThreadDetails = {
-    title: string;
-    content: string;
-    tags: string;
+export type Thread ={
+    ID: number,
+    CreatedAt: string,
+    UpdatedAt: string,
+    DeletedAt: string | null,
+    Title: string,
+    Content: string,
+    Views: number,
+    Likes: number,
+    Tags: string,
+    Comments: number[] | null,
+    UserID: string
 }

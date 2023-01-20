@@ -5,7 +5,7 @@ import ApiService from "../../services/ApiService";
 import AuthService from "../../services/AuthService";
 import theme from "../../theme";
 import { LoginState, ThreadState } from "../../types/FormStates";
-import { ThreadDetails, UserLoginDetails } from "../../types/DataModels";
+import { ThreadRequest, UserLoginRequest } from "../../types/ApiRequest";
 
 const initialState: ThreadState = {
     title: "",
@@ -50,7 +50,7 @@ export default function ThreadForm() {
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
 
-        const thread: ThreadDetails = {
+        const thread: ThreadRequest = {
             title: state.title,
             content: state.content,
             tags: state.tags

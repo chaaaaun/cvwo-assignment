@@ -2,6 +2,7 @@ package threads
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -45,7 +46,36 @@ func ThreadCtx(next http.Handler) http.Handler {
 }
 
 func ListThreads(w http.ResponseWriter, r *http.Request) {
+	var page int = 0
+	var nextPage int = 1
+	var previousPage int = 0
+	var err error
+	// Read pagination info
+	if pageStr := chi.URLParam(r, "page"); pageStr != "" {
+		page, err = strconv.Atoi(pageStr)
+		if err != nil {
+			render.Render(w, r, ErrNotFound)
+		} else if page < 0 {
+			render.Render(w, r, api.ErrBadRequest(errors.New("page number cannot be negative")))
+		}
+	}
 
+	if page > 0 {
+		nextPage = page + 1
+		previousPage = page - 1
+	}
+
+	// Get threads
+	threads, total, _ := dataaccess.DbListThreads(page)
+	render.JSON(w, r, &api.ThreadResponse{
+		Metadata: api.PaginationMetadata{
+			NextPage:     nextPage,
+			PreviousPage: previousPage,
+			CurrentPage:  page,
+			TotalPages:   total,
+		},
+		Payload: *threads,
+	})
 }
 
 func SearchThreads(w http.ResponseWriter, r *http.Request) {

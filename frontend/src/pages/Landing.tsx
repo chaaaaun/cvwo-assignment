@@ -1,17 +1,36 @@
+import { Box, Button, Skeleton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import SkeletonList from '../components/SkeletonList';
+import ThreadList from '../components/ThreadList';
+import ApiService from '../services/ApiService';
+import { Thread } from "../types/DataModels";
 
-const Landing: React.FC = () => {
+function Landing() {
+    const [thread, setThreads] = useState<Thread[]>();
+    const [error, setError] = useState<string>();
+
+    const fetchThreads = () => {
+        setError("")
+        ApiService.getThreads()
+        .then(data => setThreads(data.data))
+        .catch(err => setError(err))
+    }
+
+    useEffect(() => fetchThreads, [])
+
     return (
-        <Stack sx={{
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#ffffff0d",
-            borderRadius: "10px",
-            padding: "10px"
-        }}>
-            {"Welcome to CVWO's sample react app! Here's a basic list of forum threads for you to experiment with."}
-        </Stack>
+        <Box>
+            {(thread !== undefined) 
+                ? <ThreadList threads={thread} />
+                : error !== ""
+                ? <Stack spacing={1} alignItems="center">
+                    <Typography variant='h4'>An error has occured</Typography>
+                    <Button variant="contained" onClick={fetchThreads}>Retry</Button>
+                </Stack>
+                : <SkeletonList n={3} />
+            }
+        </Box>
     );
 };
 

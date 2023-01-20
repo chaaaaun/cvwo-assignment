@@ -3,12 +3,20 @@ package api
 import (
 	"net/http"
 
+	"github.com/chauuun/cvwo-assignment/backend/internal/models"
 	"github.com/go-chi/render"
 )
 
-type Response struct {
-	Metadata string   `json:"metadata,omitempty"`
-	Payload  []string `json:"data"`
+type ThreadResponse struct {
+	Metadata PaginationMetadata `json:"pagination"`
+	Payload  []models.Thread    `json:"data"`
+}
+
+type PaginationMetadata struct {
+	NextPage     int
+	PreviousPage int
+	CurrentPage  int
+	TotalPages   int
 }
 
 type AuthResponse struct {

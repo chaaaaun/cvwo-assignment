@@ -1,10 +1,10 @@
 import React from "react";
-import { UserLoginDetails } from "../types/DataModels";
+import { UserLoginRequest } from "../types/ApiRequest";
 
 interface AuthContextType {
     user: string;
     setUser: (username: string) => void;
-    login: (user: UserLoginDetails, callback: VoidFunction) => void;
+    login: (user: UserLoginRequest, callback: VoidFunction) => void;
     logout: (callback: VoidFunction) => void;
   }
   

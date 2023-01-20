@@ -1,6 +1,6 @@
-import { UserLoginDetails } from "../types/DataModels";
+import { UserLoginRequest } from "../types/ApiRequest";
 
-const loginApi = async (userDetails: UserLoginDetails) => {
+const loginApi = async (userDetails: UserLoginRequest) => {
     let res = await fetch("/login", {
         method: 'POST',
         headers: {
@@ -12,7 +12,7 @@ const loginApi = async (userDetails: UserLoginDetails) => {
     return;
 }
 
-const registerApi = (userDetails: UserLoginDetails) => {
+const registerApi = (userDetails: UserLoginRequest) => {
     fetch("/register", {
         method: 'POST',
         headers: {
