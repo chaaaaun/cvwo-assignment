@@ -1,4 +1,4 @@
-module cmd/server/main
+module github.com/chauuun/cvwo-assignment/backend
 
 go 1.19
 
