@@ -4,11 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/chauuun/cvwo-assignment/backend/internal/api"
 	"github.com/chauuun/cvwo-assignment/backend/internal/handlers/users"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/jwtauth/v5"
-	"github.com/go-chi/render"
 )
 
 func GetPublicRoutes() func(r chi.Router) {
@@ -30,9 +28,9 @@ func GetProtectedRoutes() func(r chi.Router) {
 		r.Use(jwtauth.Authenticator)
 
 		// Protected routes
-		r.Get("/user", func(w http.ResponseWriter, r *http.Request) {
-			token, _, _ := jwtauth.FromContext(r.Context())
-			render.JSON(w, r, &api.UserResponse{User: token.Subject()})
-		})
+		r.Get("/user", users.GetCurrentUser)
+		r.Post("/user", users.UpdateUserPassword)
+
+		// Thread Crud
 	}
 }

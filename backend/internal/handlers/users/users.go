@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -22,6 +23,11 @@ const (
 
 	ErrInvalidJson = "Invalid JSON"
 )
+
+func GetCurrentUser(w http.ResponseWriter, r *http.Request) {
+	token, _, _ := jwtauth.FromContext(r.Context())
+	render.JSON(w, r, &api.UserResponse{User: token.Subject()})
+}
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	// Bind request body
@@ -101,4 +107,12 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, &api.AuthResponse{
 		Token: tokenString,
 	})
+}
+
+func UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
+	data := &api.ChangePasswordRequest{}
+	if err := render.Bind(r, data); err != nil {
+		render.Render(w, r, api.ErrRender(err))
+		return
+	}
 }
