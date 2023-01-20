@@ -57,7 +57,17 @@ func GetThread(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateThread(w http.ResponseWriter, r *http.Request) {
-
+	// Bind request body
+	data := &api.ThreadRequest{}
+	if err := render.Bind(r, data); err != nil {
+		render.Render(w, r, api.ErrBadRequest(err))
+		return
+	}
+	user := r.Context().Value(models.UserContextKey{}).(string)
+	if err := dataaccess.DbCreateThread(data, user); err != nil {
+		render.Render(w, r, api.ErrUnprocessable(err))
+		return
+	}
 }
 
 func UpdateThread(w http.ResponseWriter, r *http.Request) {

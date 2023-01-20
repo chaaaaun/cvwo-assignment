@@ -15,6 +15,7 @@ import (
 func GetPublicRoutes() func(r chi.Router) {
 	return func(r chi.Router) {
 		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+			// TODO: serve static files here
 			w.Write([]byte("welcome anonymous"))
 		})
 
@@ -36,11 +37,10 @@ func GetProtectedRoutes() func(r chi.Router) {
 		r.Post("/user", users.UpdateUserPassword)
 
 		// Thread CRUD
-		r.Route("/thread", func(r chi.Router) {
-			r.Get("/", threads.ListThreads) // GET /threads
-
-			r.Post("/new", threads.CreateThread)    // POST /articles
-			r.Get("/search", threads.SearchThreads) // GET /articles/search
+		r.Route("/api/thread", func(r chi.Router) {
+			r.Get("/", threads.ListThreads)         // GET /thread
+			r.Post("/", threads.CreateThread)       // POST /thread
+			r.Get("/search", threads.SearchThreads) // GET /thread/search
 
 			// Subrouters:
 			r.Route("/{threadID}", func(r chi.Router) {
