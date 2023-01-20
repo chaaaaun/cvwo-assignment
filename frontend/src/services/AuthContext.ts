@@ -3,6 +3,7 @@ import { UserLoginDetails } from "../types/User";
 
 interface AuthContextType {
     user: string;
+    setUser: (username: string) => void;
     login: (user: UserLoginDetails, callback: VoidFunction) => void;
     logout: (callback: VoidFunction) => void;
   }

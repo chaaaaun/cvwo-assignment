@@ -88,10 +88,11 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	atCookie := http.Cookie{
-		Name:    "jwt",
-		Path:    "/",
-		Value:   tokenString,
-		Expires: time.Now().Add(jwtExpiration),
+		Name:     "jwt",
+		Path:     "/",
+		SameSite: 2,
+		Value:    tokenString,
+		Expires:  time.Now().Add(jwtExpiration),
 	}
 
 	// Return success

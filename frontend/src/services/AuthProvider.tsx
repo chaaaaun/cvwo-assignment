@@ -1,11 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Cookies from 'js-cookie';
 import { Navigate, useLocation } from "react-router-dom";
 import { UserLoginDetails } from "../types/User";
 import { AuthContext } from "./AuthContext";
 import AuthService from "./AuthService";
-
-
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let [user, setUser] = React.useState<string>("");
@@ -26,7 +24,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         callback();
     };
 
-    let value = { user, login, logout };
+    let value = { user, setUser, login, logout };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
