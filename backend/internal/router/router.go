@@ -27,8 +27,8 @@ func Setup() chi.Router {
 }
 
 func setUpRoutes(r chi.Router) {
-	// Routes that do not require auth
-	r.Group(routes.GetNoAuthRoutes())
+	r.Group(routes.GetPublicRoutes())
+	r.Group(routes.GetProtectedRoutes())
 
 	r.Get("/panic", func(w http.ResponseWriter, r *http.Request) {
 		panic("test")
