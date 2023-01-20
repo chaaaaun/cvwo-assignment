@@ -1,8 +1,9 @@
+import { Typography } from '@mui/material';
 import React from 'react';
 
-const CreateNewThread: React.FC = () => {
+function CreateNewThread() {
     return (
-        <h3>Create new thread</h3>
+        <Typography variant='h3'>Create new thread</Typography>
     );
 };
 

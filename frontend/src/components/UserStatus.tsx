@@ -1,4 +1,6 @@
+import { Box, Button, Typography } from "@mui/material";
 import Cookies from "js-cookie";
+import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../services/AuthContext";
 
@@ -20,19 +22,16 @@ function UserStatus() {
     }
 
     if (!auth.user) {
-        return <Link to="/login" onClick={checkJwt}>Login</Link>;
+        return <Button component={Link} to="/login" onClick={checkJwt}>Login</Button>
     } else {
         return (
-            <p>
-                Welcome {auth.user}!{" "}
-                <button
-                    onClick={() => {
-                        auth.logout(() => navigate("/"));
-                    }}
-                >
+            <Box>
+                <Typography variant="body1">Welcome {auth.user}!</Typography>
+                <Button component={Link} to="/thread/new">New Thread</Button>
+                <Button onClick={() => { auth.logout(() => navigate("/")); }}>
                     Logout
-                </button>
-            </p>
+                </Button>
+            </Box>
         );
     }
 }

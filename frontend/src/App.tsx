@@ -1,6 +1,8 @@
+import { Container } from '@mui/material';
 import React, { FormEventHandler } from 'react';
 import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
 import './App.css';
+import Header from './components/Header';
 import UserStatus from './components/UserStatus';
 import CreateNewThread from './pages/CreateNewThread';
 import Landing from './pages/Landing';
@@ -9,9 +11,9 @@ import { AuthProvider, RequireAuth } from './services/AuthProvider';
 
 const App: React.FC = () => {
     return (
-        <div className="App">
+        <Container maxWidth="lg">
             <AuthProvider>
-                <UserStatus />
+                <Header />
                 <li>
                     <Link to="/">Public Page</Link>
                 </li>
@@ -30,7 +32,7 @@ const App: React.FC = () => {
                     />
                 </Routes>
             </AuthProvider>
-        </div>
+        </Container>
     );
 }
 
