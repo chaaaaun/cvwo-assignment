@@ -1,7 +1,7 @@
-import { AccessTimeFilled, Person, ThumbsUpDown, ThumbUp } from "@mui/icons-material";
+import { Person, ThumbUp } from "@mui/icons-material";
 import { Button, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
-import { threadId } from "worker_threads";
 import { Thread } from "../types/DataModels";
+import CommentForm from "./forms/CommentForm";
 import TagList from "./TagList";
 
 function ThreadDetails(props: { thread: Thread }) {
@@ -14,13 +14,14 @@ function ThreadDetails(props: { thread: Thread }) {
                     <TagList tags={props.thread.Tags} size="medium" />
                     <Typography variant="h3">{props.thread.Title}</Typography>
                     <Typography variant="body1">{props.thread.Content}</Typography>
-                    <Stack direction='row' justifyContent='space-between' spacing={0.5}>
-                        <Button variant="contained" startIcon={<ThumbUp />}>Like</Button>
-                        <Stack direction='row' spacing={0.5} alignItems='end'>
-                                        <Chip variant='outlined' sx={{ border: "none" }} icon={<Person />} label={props.thread.UserID} />
-                                        <Chip variant='outlined' sx={{ border: "none" }} icon={<AccessTimeFilled />} label={props.thread.CreatedAt} />
-                                    </Stack>
+                    <Stack direction='row' justifyContent='space-between' spacing={0.5} marginBottom={3}>
+                        <Button variant="contained" startIcon={<ThumbUp />} sx={{ alignSelf: "end" }}>Like</Button>
+                        <Stack spacing={0} alignItems='end'>
+                            <Chip variant='outlined' sx={{ border: "none" }} icon={<Person />} label={props.thread.UserID} />
+                            <Chip variant='outlined' sx={{ border: "none" }} label={"Created " + props.thread.CreatedAt} />
+                        </Stack>
                     </Stack>
+                    <CommentForm threadId={props.thread.ID}/>
                 </Stack>
             </CardContent>
         </Card>

@@ -1,10 +1,10 @@
-import { Typography, Button } from "@mui/material";
+import { ArrowUpward } from "@mui/icons-material";
+import { Button, Fab, Typography } from "@mui/material";
 import { Box, Stack } from "@mui/system";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import SkeletonList from "../components/SkeletonList";
 import ThreadDetails from "../components/ThreadDetails";
-import ThreadList from "../components/ThreadList";
 import ApiService from "../services/ApiService";
 import { Thread } from "../types/DataModels";
 

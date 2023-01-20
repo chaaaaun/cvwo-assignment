@@ -9,3 +9,7 @@ export type ThreadState = {
     content: string;
     tags: string;
 }
+
+export type CommentState = {
+    content: string;
+}

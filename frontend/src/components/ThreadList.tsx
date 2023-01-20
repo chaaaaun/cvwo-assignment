@@ -31,7 +31,7 @@ function ThreadList(props: { threads: Thread[] }) {
                             <Grid2 lg={3}>
                                 <Stack spacing={0.5} alignItems='end'>
                                     <Chip variant='outlined' sx={{ border: "none" }} icon={<Person />} label={thread.UserID} />
-                                    <Chip variant='outlined' sx={{ border: "none" }} icon={<AccessTimeFilled />} label={thread.UpdatedAt} />
+                                    <Typography variant="body1">Updated {thread.UpdatedAt}</Typography>
                                 </Stack>
                             </Grid2>
                         </Grid2>
