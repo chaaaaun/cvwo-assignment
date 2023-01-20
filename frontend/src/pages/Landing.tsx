@@ -1,12 +1,14 @@
 import { Box, Button, Skeleton, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import SkeletonList from '../components/SkeletonList';
 import ThreadList from '../components/ThreadList';
 import ApiService from '../services/ApiService';
 import { Thread } from "../types/DataModels";
 
 function Landing() {
+    const isInitialMount = useRef(true);
+    
     const [thread, setThreads] = useState<Thread[]>();
     const [error, setError] = useState<string>();
 
@@ -17,7 +19,12 @@ function Landing() {
         .catch(err => setError(err))
     }
 
-    useEffect(() => fetchThreads, [])
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            fetchThreads();
+         }
+    }, [])
 
     return (
         <Box>

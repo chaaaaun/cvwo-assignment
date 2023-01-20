@@ -6,6 +6,7 @@ import CreateNewThread from './pages/CreateNewThread';
 import Landing from './pages/Landing';
 import LoginForm from './components/login/LoginForm';
 import { AuthProvider, RequireAuth } from './services/AuthProvider';
+import ThreadView from './pages/ThreadView';
 
 function App() {
     return (
@@ -22,6 +23,7 @@ function App() {
                             </RequireAuth>
                         }
                     />
+                    <Route path="/thread/:threadId" element={<ThreadView />} />
                 </Routes>
             </AuthProvider>
         </Container>

@@ -8,3 +8,7 @@ export type ThreadRequest = {
     content: string;
     tags: string;
 }
+
+export type CommentRequest = {
+    content: string;
+}

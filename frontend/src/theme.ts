@@ -12,6 +12,15 @@ const theme = createTheme({
       main: '#19857b',
     }
   },
+  components: {
+    MuiCard: {
+        styleOverrides: {
+            root: {
+                borderRadius: "10px",
+            }
+        }
+    }
+  }
 });
 
 export default theme;

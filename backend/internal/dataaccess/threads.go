@@ -6,11 +6,15 @@ import (
 	"github.com/chauuun/cvwo-assignment/backend/internal/api"
 	"github.com/chauuun/cvwo-assignment/backend/internal/database"
 	"github.com/chauuun/cvwo-assignment/backend/internal/models"
+	"gorm.io/gorm"
 )
 
 func DbGetThread(id int) (*models.Thread, error) {
+	println(id)
+	// Retreives thread by primary key, preloading associated comments
 	var thread models.Thread
-	database.DB.First(&thread)
+	database.DB.First(&thread, id)
+	database.DB.Model(&thread).Update("views", gorm.Expr("views + ?", 1))
 	return &thread, nil
 }
 

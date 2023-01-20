@@ -13,8 +13,6 @@ import (
 	"github.com/go-chi/render"
 )
 
-type keyThread struct{}
-
 var (
 	ErrNotFound = &api.ErrResponse{HTTPStatusCode: 404, StatusText: "Resource not found."}
 )
@@ -40,7 +38,7 @@ func ThreadCtx(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), keyThread{}, thread)
+		ctx := context.WithValue(r.Context(), models.ThreadContextKey{}, thread)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
@@ -67,6 +65,8 @@ func ListThreads(w http.ResponseWriter, r *http.Request) {
 
 	// Get threads
 	threads, total, _ := dataaccess.DbListThreads(page)
+	println((*threads)[0].ID)
+
 	render.JSON(w, r, &api.ThreadResponse{
 		Metadata: api.PaginationMetadata{
 			NextPage:     nextPage,
@@ -83,7 +83,13 @@ func SearchThreads(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetThread(w http.ResponseWriter, r *http.Request) {
+	// Get thread from context
+	thread := r.Context().Value(models.ThreadContextKey{}).(*models.Thread)
 
+	render.Status(r, http.StatusOK)
+	render.JSON(w, r, &api.ThreadResponse{
+		Payload: []models.Thread{*thread},
+	})
 }
 
 func CreateThread(w http.ResponseWriter, r *http.Request) {
