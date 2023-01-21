@@ -9,9 +9,8 @@ import (
 	"gorm.io/gorm"
 )
 
+// Retreives thread by ID
 func DbGetThread(id int) (*models.Thread, error) {
-	println(id)
-	// Retreives thread by primary key, preloading associated comments
 	var thread models.Thread
 	database.DB.First(&thread, id)
 	database.DB.Model(&thread).Update("views", gorm.Expr("views + ?", 1))
@@ -52,7 +51,14 @@ func DbCreateThread(threadData *api.ThreadRequest, user string) error {
 }
 
 func DbUpdateThread(newThreadData *api.ThreadRequest, thread *models.Thread) error {
+	if result := database.DB.Model(&thread).Updates(newThreadData); result.Error != nil {
+		return result.Error
+	}
 
+	return nil
+}
+
+func DbDeleteThread(newThreadData *api.ThreadRequest, thread *models.Thread) error {
 	if result := database.DB.Model(&thread).Updates(newThreadData); result.Error != nil {
 		return result.Error
 	}

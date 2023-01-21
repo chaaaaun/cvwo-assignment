@@ -25,6 +25,7 @@ func GetPublicRoutes() func(r chi.Router) {
 
 		r.Route("/api/thread", func(r chi.Router) {
 			r.Get("/", threads.ListThreads)         // GET /thread
+			r.Get("/{threadID}", threads.GetThread) // GET /thread/123
 			r.Get("/search", threads.SearchThreads) // GET /thread/search
 		})
 
@@ -50,13 +51,15 @@ func GetProtectedRoutes() func(r chi.Router) {
 			// Subrouters:
 			r.Route("/{threadID}", func(r chi.Router) {
 				r.Use(threads.ThreadCtx)
-				r.Get("/", threads.GetThread)       // GET /thread/123
 				r.Put("/", threads.UpdateThread)    // PUT /thread/123
 				r.Delete("/", threads.DeleteThread) // DELETE /thread/123
 
-				r.Post("/comment", comments.CreateComment)               // POST /comment
-				r.Put("/comment/{commentID}", comments.UpdateComment)    // PUT /comment/123
-				r.Delete("/comment/{commentID}", comments.DeleteComment) // DELETE /comment/123
+				r.Post("/comment", comments.CreateComment) // POST /comment
+				r.Route("/comment/{commentID}", func(r chi.Router) {
+					r.Use(comments.CommentCtx)
+					r.Put("/", comments.UpdateComment)    // PUT /comment/123
+					r.Delete("/", comments.DeleteComment) // DELETE /comment/123
+				})
 			})
 		})
 	}

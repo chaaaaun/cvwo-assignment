@@ -1,6 +1,7 @@
 package comments
 
 import (
+	"context"
 	"errors"
 	"net/http"
 	"strconv"
@@ -8,8 +9,34 @@ import (
 	"github.com/chauuun/cvwo-assignment/backend/internal/api"
 	"github.com/chauuun/cvwo-assignment/backend/internal/dataaccess"
 	"github.com/chauuun/cvwo-assignment/backend/internal/models"
+	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
 )
+
+// Middleware that retrieves the requested thread and passes it to handlers down the line
+func CommentCtx(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var comment *models.Comment
+
+		if commentID := chi.URLParam(r, "commentID"); commentID != "" {
+			id, err := strconv.Atoi(commentID)
+			if err != nil {
+				render.Render(w, r, api.ErrNotFound(err))
+			}
+
+			comment, err = dataaccess.DbGetComment(id)
+			if err != nil {
+				render.Render(w, r, api.ErrUnprocessable(err))
+			}
+		} else {
+			render.Render(w, r, api.ErrBadRequest(errors.New("invalid comment ID")))
+			return
+		}
+
+		ctx := context.WithValue(r.Context(), models.CommentContextKey{}, comment)
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
 
 func ListComments(w http.ResponseWriter, r *http.Request) {
 	var threadId uint64
@@ -71,12 +98,13 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
+
+	render.Status(r, http.StatusCreated)
 }
 
 func UpdateComment(w http.ResponseWriter, r *http.Request) {
 	// Get context info
-	user := r.Context().Value(models.UserContextKey{}).(string)
-	thread := r.Context().Value(models.ThreadContextKey{}).(*models.Thread)
+	comment := r.Context().Value(models.CommentContextKey{}).(*models.Comment)
 
 	// Bind request body
 	data := &api.CommentRequest{}
@@ -85,26 +113,22 @@ func UpdateComment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := dataaccess.DbCreateComment(data, thread.ID, user); err != nil {
+	if err := dataaccess.DbUpdateComment(data, comment); err != nil {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
+
+	render.Status(r, http.StatusOK)
 }
 
 func DeleteComment(w http.ResponseWriter, r *http.Request) {
 	// Get context info
-	user := r.Context().Value(models.UserContextKey{}).(string)
-	thread := r.Context().Value(models.ThreadContextKey{}).(*models.Thread)
+	comment := r.Context().Value(models.CommentContextKey{}).(*models.Comment)
 
-	// Bind request body
-	data := &api.CommentRequest{}
-	if err := render.Bind(r, data); err != nil {
-		render.Render(w, r, api.ErrBadRequest(err))
-		return
-	}
-
-	if err := dataaccess.DbCreateComment(data, thread.ID, user); err != nil {
+	if err := dataaccess.DbDeleteComment(comment); err != nil {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
+
+	render.Status(r, http.StatusOK)
 }

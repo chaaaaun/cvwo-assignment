@@ -25,3 +25,5 @@ func (comment *Comment) MarshalJSON() ([]byte, error) {
 		Alias: (*Alias)(comment),
 	})
 }
+
+type CommentContextKey struct{}

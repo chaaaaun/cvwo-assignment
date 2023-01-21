@@ -13,26 +13,23 @@ import (
 	"github.com/go-chi/render"
 )
 
-var ()
-
+// Middleware that retrieves the requested thread and passes it to handlers down the line
 func ThreadCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var thread *models.Thread
-		var err error
 
 		if threadID := chi.URLParam(r, "threadID"); threadID != "" {
-			// string to int
 			id, err := strconv.Atoi(threadID)
 			if err != nil {
 				render.Render(w, r, api.ErrNotFound(err))
 			}
-			thread, _ = dataaccess.DbGetThread(id)
+
+			thread, err = dataaccess.DbGetThread(id)
+			if err != nil {
+				render.Render(w, r, api.ErrUnprocessable(err))
+			}
 		} else {
-			render.Render(w, r, api.ErrNotFound(err))
-			return
-		}
-		if err != nil {
-			render.Render(w, r, api.ErrNotFound(err))
+			render.Render(w, r, api.ErrBadRequest(errors.New("invalid thread ID")))
 			return
 		}
 
@@ -80,8 +77,16 @@ func SearchThreads(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetThread(w http.ResponseWriter, r *http.Request) {
-	// Get thread from context
-	thread := r.Context().Value(models.ThreadContextKey{}).(*models.Thread)
+	var id int
+	var err error
+	if idStr := chi.URLParam(r, "threadID"); idStr != "" {
+		id, err = strconv.Atoi(idStr)
+		if err != nil {
+			render.Render(w, r, api.ErrBadRequest(errors.New("invalid ID")))
+		}
+	}
+
+	thread, _ := dataaccess.DbGetThread(id)
 
 	render.Status(r, http.StatusOK)
 	render.JSON(w, r, &api.ThreadResponse{
