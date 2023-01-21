@@ -63,7 +63,6 @@ func ListThreads(w http.ResponseWriter, r *http.Request) {
 
 	// Get threads
 	threads, total, _ := dataaccess.DbListThreads(page)
-	println((*threads)[0].ID)
 
 	render.JSON(w, r, &api.ThreadResponse{
 		Metadata: api.PaginationMetadata{

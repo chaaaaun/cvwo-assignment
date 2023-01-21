@@ -20,7 +20,8 @@ export default function CommentForm(props: { threadId: string }) {
             threadId: props.threadId,
             content: content
         }
-        ApiService.createComment(comment);
+        ApiService.createComment(comment).catch(err => console.error(err));
+        
     }
 
     return (

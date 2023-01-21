@@ -1,11 +1,11 @@
 import { Thread } from "../types/DataModels";
 
-export type GetThreadResponse = {
+export type GetResponse<T> = {
     pagination: PaginationMetadata;
-    data: Thread[];
+    data: T[];
 }
 
-type PaginationMetadata = {
+export type PaginationMetadata = {
     NextPage: number,
     PreviousPage: number,
     CurrentPage: number,

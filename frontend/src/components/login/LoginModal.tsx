@@ -33,7 +33,7 @@ export default function LoginModal() {
                     auth.setUser(data.user)
                     navigate("/")
                 })
-                .catch(() => auth.logout(() => { }))
+                .catch(() => auth.logout(() => {}))
         } else {
             setOpen(true);
         }
