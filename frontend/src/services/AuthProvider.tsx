@@ -3,13 +3,13 @@ import Cookies from 'js-cookie';
 import { Navigate, useLocation } from "react-router-dom";
 import { UserLoginRequest } from "../types/ApiRequest";
 import { AuthContext } from "./AuthContext";
-import AuthService from "./AuthService";
+import UserAPI from "../api/UserAPI";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let [user, setUser] = React.useState<string>("");
 
     let login = (newUser: UserLoginRequest, callback: VoidFunction) => {
-            AuthService.loginApi(newUser)
+            UserAPI.loginUser(newUser)
             .then(() => {
                 setUser(newUser.id);
                 callback();

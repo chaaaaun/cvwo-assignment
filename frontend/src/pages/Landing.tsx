@@ -3,8 +3,9 @@ import { Stack } from '@mui/system';
 import React, { useEffect, useRef, useState } from 'react';
 import SkeletonList from '../components/SkeletonList';
 import ThreadList from '../components/ThreadList';
-import ApiService from '../services/ApiService';
+import ApiService from '../api/CommentAPI';
 import { Thread } from "../types/DataModels";
+import ThreadAPI from '../api/ThreadAPI';
 
 function Landing() {
     const isInitialMount = useRef(true);
@@ -14,7 +15,7 @@ function Landing() {
 
     const fetchThreads = () => {
         setError("")
-        ApiService.getThreads()
+        ThreadAPI.getThreads()
         .then(data => setThreads(data.data))
         .catch(err => setError(err))
     }

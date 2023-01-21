@@ -1,4 +1,6 @@
-import { Thread } from "../types/DataModels";
+export type UserResponse = {
+    user: string;
+}
 
 export type GetResponse<T> = {
     pagination: PaginationMetadata;
@@ -6,8 +8,8 @@ export type GetResponse<T> = {
 }
 
 export type PaginationMetadata = {
-    NextPage: number,
-    PreviousPage: number,
-    CurrentPage: number,
-    TotalPages: number
+    NextPage: number;
+    PreviousPage: number;
+    CurrentPage: number;
+    TotalPages: number;
 }

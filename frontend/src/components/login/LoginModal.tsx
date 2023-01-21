@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal';
 import Cookies from 'js-cookie';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import UserAPI from '../../api/UserAPI';
 import { useAuth } from '../../services/AuthContext';
 import LoginForm from './LoginForm';
 
@@ -27,8 +28,7 @@ export default function LoginModal() {
     const checkJwt = () => {
         let token = Cookies.get("jwt")
         if (token !== undefined) {
-            fetch("/user", { credentials: "include" })
-                .then((response) => response.json())
+            UserAPI.getUser()
                 .then((data) => {
                     auth.setUser(data.user)
                     navigate("/")

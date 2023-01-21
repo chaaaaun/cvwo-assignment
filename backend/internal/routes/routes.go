@@ -18,7 +18,7 @@ func GetPublicRoutes() func(r chi.Router) {
 			w.Write([]byte("welcome anonymous"))
 		})
 
-		r.Route("/api", func(r chi.Router) {
+		r.Route("/api/user", func(r chi.Router) {
 			r.Post("/login", users.AuthenticateUser)
 			r.Post("/register", users.CreateUser)
 		})
@@ -27,9 +27,9 @@ func GetPublicRoutes() func(r chi.Router) {
 			r.Get("/", threads.ListThreads)         // GET thread list
 			r.Get("/{threadID}", threads.GetThread) // GET single thread
 			r.Get("/search", threads.SearchThreads) // GET thread list with filter
-		})
 
-		r.Get("/api/comment", comments.ListComments) // GET comment list
+			r.Get("/{threadID}/comment", comments.ListComments) // GET comment list
+		})
 	}
 }
 
@@ -39,10 +39,11 @@ func GetProtectedRoutes() func(r chi.Router) {
 		tokenAuth := jwtauth.New("HS256", []byte(os.Getenv("JWT_SECRET")), nil)
 		r.Use(jwtauth.Verifier(tokenAuth))
 		r.Use(jwtauth.Authenticator)
+		// User auth middleware
+		r.Use(users.UserCtx)
 
 		// User CRUD
 		r.Route("/api/auth/user", func(r chi.Router) {
-			r.Use(users.UserCtx)
 			r.Get("/", users.GetCurrentUser)
 			r.Post("/", users.UpdateUserPassword)
 		})

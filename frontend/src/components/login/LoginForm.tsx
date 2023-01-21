@@ -2,7 +2,7 @@ import { Button, Link, TextField, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/AuthContext";
-import AuthService from "../../services/AuthService";
+import UserAPI from "../../api/UserAPI";
 import theme from "../../theme";
 import { LoginState } from "../../types/FormStates";
 import { UserLoginRequest } from "../../types/ApiRequest";
@@ -70,7 +70,7 @@ export default function LoginForm() {
                 () => { navigate(from, { replace: true }) }
             )
         } else {
-            AuthService.registerApi(user)
+            UserAPI.registerUser(user);
         }
     }
 

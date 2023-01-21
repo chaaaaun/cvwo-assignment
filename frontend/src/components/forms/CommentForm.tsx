@@ -1,6 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
-import ApiService from "../../services/ApiService";
+import ApiService from "../../api/CommentAPI";
 import { useAuth } from "../../services/AuthContext";
 import theme from "../../theme";
 import { CommentRequest } from "../../types/ApiRequest";
@@ -17,7 +17,7 @@ export default function CommentForm(props: { threadId: string }) {
         event.preventDefault();
 
         const comment: CommentRequest = {
-            threadId: props.threadId,
+            threadID: props.threadId,
             content: content
         }
         ApiService.createComment(comment).catch(err => console.error(err));

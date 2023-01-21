@@ -1,11 +1,11 @@
 import { Button, InputAdornment, Link, TextField, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ApiService from "../../services/ApiService";
-import AuthService from "../../services/AuthService";
+import CommentAPI from "../../api/CommentAPI";
 import theme from "../../theme";
 import { LoginState, ThreadState } from "../../types/FormStates";
 import { ThreadRequest, UserLoginRequest } from "../../types/ApiRequest";
+import ThreadAPI from "../../api/ThreadAPI";
 
 const initialState: ThreadState = {
     title: "",
@@ -56,7 +56,7 @@ export default function ThreadForm() {
             tags: state.tags
         }
         
-        ApiService.createThread(thread);
+        ThreadAPI.createThread(thread);
     }
 
     return (

@@ -5,9 +5,10 @@ import { useNavigate, useParams } from "react-router";
 import CommentList from "../components/CommentList";
 import SkeletonList from "../components/SkeletonList";
 import ThreadDetails from "../components/ThreadDetails";
-import ApiService from "../services/ApiService";
+import ApiService from "../api/CommentAPI";
 import { PaginationMetadata } from "../types/ApiResponse";
 import { Thread, Comment } from "../types/DataModels";
+import ThreadAPI from "../api/ThreadAPI";
 
 
 function ThreadView() {
@@ -35,7 +36,7 @@ function ThreadView() {
     const fetchThreadDetails = () => {
         setError("")
 
-        ApiService.getThreadDetails(threadId!)
+        ThreadAPI.getThreadDetails(threadId!)
             .then(data => setThread(data.data[0]))
             .catch(err => setError(err))
 
