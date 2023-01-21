@@ -1,10 +1,12 @@
 package users
 
 import (
+	"context"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/go-chi/jwtauth/v5"
 	"github.com/go-chi/render"
 	"github.com/golang-jwt/jwt/v4"
 	"golang.org/x/crypto/bcrypt"
@@ -19,12 +21,25 @@ const (
 	passwordCost int = 10
 	// 3 days for expiration of jwt token
 	jwtExpiration time.Duration = time.Hour * 24 * 3
-
-	ErrInvalidJson = "Invalid JSON"
 )
+
+// Middleware that retrieves the currently authenticated user from JWT
+func UserCtx(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		token, _, err := jwtauth.FromContext(r.Context())
+		if err != nil {
+			render.Status(r, http.StatusUnauthorized)
+			return
+		}
+
+		ctx := context.WithValue(r.Context(), models.UserContextKey{}, token.Subject())
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
 
 func GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(models.UserContextKey{}).(string)
+	render.Status(r, http.StatusOK)
 	render.JSON(w, r, &api.UserResponse{User: user})
 }
 
