@@ -10,6 +10,5 @@ export type ThreadRequest = {
 }
 
 export type CommentRequest = {
-    threadID: string;
     content: string;
 }

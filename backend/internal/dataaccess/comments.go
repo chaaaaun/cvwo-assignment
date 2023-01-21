@@ -13,7 +13,7 @@ func DbListComments(page int, threadId uint64) (*[]models.Comment, int, error) {
 	var comments []models.Comment
 	// Get 10 entries with page offset
 	offset := (page - 1) * 10
-	selection := []string{"id", "created_at", "updated_at", "content", "user_id"}
+	selection := []string{"id", "created_at", "updated_at", "content", "thread_id", "user_id"}
 	database.DB.Limit(10).Offset(offset).Select(selection).Order("created_at asc").Find(&comments, "thread_id = ?", threadId)
 
 	// Get total comment count
@@ -25,7 +25,7 @@ func DbListComments(page int, threadId uint64) (*[]models.Comment, int, error) {
 }
 
 // Retreives comment by ID
-func DbGetComment(id int) (*models.Comment, error) {
+func DbGetComment(id uint) (*models.Comment, error) {
 	var comment models.Comment
 	if result := database.DB.First(&comment, id); result.Error != nil {
 		return nil, result.Error
@@ -46,8 +46,8 @@ func DbCreateComment(newCommentData *api.CommentRequest, threadId uint, user str
 	return nil
 }
 
-func DbUpdateComment(newCommentData *api.CommentRequest, comment *models.Comment) error {
-	if result := database.DB.Model(&comment).Updates(newCommentData); result.Error != nil {
+func DbUpdateComment(comment *models.Comment) error {
+	if result := database.DB.Save(&comment); result.Error != nil {
 		return result.Error
 	}
 	return nil

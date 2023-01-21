@@ -24,7 +24,7 @@ func CommentCtx(next http.Handler) http.Handler {
 				render.Render(w, r, api.ErrNotFound(err))
 			}
 
-			comment, err = dataaccess.DbGetComment(id)
+			comment, err = dataaccess.DbGetComment(uint(id))
 			if err != nil {
 				render.Render(w, r, api.ErrUnprocessable(err))
 			}
@@ -54,7 +54,7 @@ func ListComments(w http.ResponseWriter, r *http.Request) {
 			render.Render(w, r, api.ErrBadRequest(errors.New("page number cannot be negative")))
 		}
 	}
-	if idStr := r.URL.Query().Get("threadId"); idStr != "" {
+	if idStr := chi.URLParam(r, "threadID"); idStr != "" {
 		threadId, err = strconv.ParseUint(idStr, 10, 64)
 		if err != nil {
 			render.Render(w, r, api.ErrBadRequest(errors.New("invalid page number")))
@@ -105,15 +105,14 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 func UpdateComment(w http.ResponseWriter, r *http.Request) {
 	// Get context info
 	comment := r.Context().Value(models.CommentContextKey{}).(*models.Comment)
-
 	// Bind request body
 	data := &api.CommentRequest{}
 	if err := render.Bind(r, data); err != nil {
 		render.Render(w, r, api.ErrBadRequest(err))
 		return
 	}
-
-	if err := dataaccess.DbUpdateComment(data, comment); err != nil {
+	comment.Content = data.Content
+	if err := dataaccess.DbUpdateComment(comment); err != nil {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}

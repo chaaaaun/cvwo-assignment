@@ -18,6 +18,6 @@ export type Comment = {
     UpdatedAt: string;
     DeletedAt: string | null;
     Content: string;
-    ThreadID: number;
+    ThreadID: string;
     UserID: string;
 }

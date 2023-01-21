@@ -32,7 +32,7 @@ function ThreadDetails(props: { thread: Thread }) {
                             <Chip variant='outlined' sx={{ border: "none" }} label={"Created " + props.thread.CreatedAt} />
                         </Stack>
                     </Stack>
-                    <CommentForm threadId={props.thread.ID}/>
+                    <CommentForm threadId={props.thread.ID} />
                 </Stack>
             </CardContent>
         </Card>

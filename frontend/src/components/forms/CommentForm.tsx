@@ -1,27 +1,37 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
-import ApiService from "../../api/CommentAPI";
+import CommentAPI from "../../api/CommentAPI";
 import { useAuth } from "../../services/AuthContext";
 import theme from "../../theme";
 import { CommentRequest } from "../../types/ApiRequest";
+import { Comment } from "../../types/DataModels";
 
-export default function CommentForm(props: { threadId: string }) {
-    const [content, setContent] = useState<string>("");
+export default function CommentForm(props: { threadId: string, comment?: Comment }) {
+    const [content, setContent] = useState<string>(
+        props.comment
+            ? props.comment.Content
+            : ""
+    );
     const auth = useAuth();
-    
+
     const onContentChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         setContent(e.currentTarget.value);
     }
-    
+
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
 
-        const comment: CommentRequest = {
-            threadID: props.threadId,
-            content: content
+        if (!props.comment) {
+            const comment: CommentRequest = {
+                content: content
+            }
+            CommentAPI.createComment(comment, props.threadId).catch(err => console.error(err));
+        } else {
+            const comment: CommentRequest = {
+                content: content
+            }
+            CommentAPI.updateComment(comment, props.threadId, props.comment.ID).catch(err => console.error(err));
         }
-        ApiService.createComment(comment).catch(err => console.error(err));
-        
     }
 
     return (
@@ -39,7 +49,7 @@ export default function CommentForm(props: { threadId: string }) {
                     ? <Button onClick={handleSubmit} variant="contained" sx={{ marginY: theme.spacing(1) }}>Comment</Button>
                     : <Button variant="contained" disabled sx={{ marginY: theme.spacing(1) }}>Log In to Comment</Button>
             }
-            
+
         </form>
     );
 }

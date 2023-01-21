@@ -2,8 +2,8 @@ import { CommentRequest } from "../types/ApiRequest";
 import { GetResponse } from "../types/ApiResponse";
 import { Comment } from "../types/DataModels";
 
-const createComment = async (comment: CommentRequest) => {
-    let res = await fetch(`/api/auth/thread/${comment.threadID}/comment`, {
+const createComment = async (comment: CommentRequest, threadID: string) => {
+    let res = await fetch(`/api/auth/thread/${threadID}/comment`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -22,8 +22,8 @@ const getComments = async (threadID: string, page: number) => {
     return await res.json() as GetResponse<Comment>;
 }
 
-const updateComment = async (comment: CommentRequest, commentID: string) => {
-    let res = await fetch(`/api/auth/thread/${comment.threadID}/comment/${commentID}`, {
+const updateComment = async (comment: CommentRequest, threadID: string, commentID: string) => {
+    let res = await fetch(`/api/auth/thread/${threadID}/comment/${commentID}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
