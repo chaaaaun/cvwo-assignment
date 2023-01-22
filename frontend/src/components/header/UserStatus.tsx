@@ -1,5 +1,4 @@
 import { Button, Stack, Typography } from "@mui/material";
-import Cookies from "js-cookie";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/AuthContext";
 import LoginModal from "../login/LoginModal";
