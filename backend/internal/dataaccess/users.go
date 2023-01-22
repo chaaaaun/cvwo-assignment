@@ -6,12 +6,9 @@ import (
 )
 
 func DbCreateUser(user *models.User) error {
-	result := database.DB.Create(&user)
-
-	if result.Error != nil {
+	if result := database.DB.Create(&user); result.Error != nil {
 		return result.Error
 	}
-
 	return nil
 }
 

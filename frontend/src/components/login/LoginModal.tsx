@@ -1,11 +1,5 @@
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
-import Cookies from 'js-cookie';
+import { Box, Button, Modal } from '@mui/material';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import UserAPI from '../../api/UserAPI';
-import { useAuth } from '../../services/AuthContext';
 import LoginForm from './LoginForm';
 
 const modalStyle = {

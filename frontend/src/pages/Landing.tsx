@@ -2,40 +2,58 @@ import { Box, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useEffect, useRef, useState } from 'react';
 import ThreadAPI from '../api/ThreadAPI';
+import { ErrorDialog } from '../components/ErrorDialog';
 import SkeletonList from '../components/SkeletonList';
 import ThreadList from '../components/ThreadList';
 import { Thread } from "../types/DataModels";
 
+type ThreadState = {
+    isFetching: boolean;
+    error: string;
+    data: Thread[];
+}
+
 function Landing() {
     const isInitialMount = useRef(true);
-    
-    const [thread, setThreads] = useState<Thread[]>();
-    const [error, setError] = useState<string>();
+
+    const [state, setState] = useState<ThreadState>({
+        isFetching: false,
+        error: "",
+        data: []
+    })
 
     const fetchThreads = () => {
-        setError("")
+        setState({
+            isFetching: true,
+            error: "",
+            data: []
+        })
+
         ThreadAPI.getThreads()
-        .then(data => setThreads(data.data))
-        .catch(err => setError(err))
+            .then(res => setState(prev => { return { ...prev, data: res.data }}))
+            .catch(err => setState(prev => { return { ...prev, error: err }}))
+            .finally(() => setState(prev => { return {
+                ...prev,
+                isFetching: false
+            }}))
     }
 
     useEffect(() => {
         if (isInitialMount.current) {
             isInitialMount.current = false;
             fetchThreads();
-         }
+        }
     }, [])
 
     return (
         <Box>
-            {(thread !== undefined) 
-                ? <ThreadList threads={thread} />
-                : error !== ""
-                ? <Stack spacing={1} alignItems="center">
-                    <Typography variant='h4'>An error has occured</Typography>
-                    <Button variant="contained" onClick={fetchThreads}>Retry</Button>
-                </Stack>
-                : <SkeletonList n={3} />
+            {state.isFetching
+                ? <SkeletonList n={3} />
+                : state.error
+                    ? <ErrorDialog errMsg={`${state.error}`} retryFn={fetchThreads} />
+                    : state.data.length !== 0
+                        ? <ThreadList threads={state.data} />
+                        : <Typography variant='h4'>{`No threads yet :( Create one?`}</Typography>
             }
         </Box>
     );

@@ -8,12 +8,12 @@ import UserAPI from "../api/UserAPI";
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     let [user, setUser] = React.useState<string>("");
 
-    let login = (newUser: UserLoginRequest, callback: VoidFunction) => {
+    let login = (newUser: UserLoginRequest, callback: (error: string) => void) => {
             UserAPI.loginUser(newUser)
             .then(() => {
                 setUser(newUser.id);
-                callback();
-            }).catch(err => { throw err })
+                callback('');
+            }).catch(err => { callback(err) })
     };
 
     let logout = (callback: VoidFunction) => {

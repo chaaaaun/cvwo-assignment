@@ -1,4 +1,4 @@
-import { Button, Link, TextField, Typography } from "@mui/material";
+import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../services/AuthContext";
@@ -6,11 +6,16 @@ import UserAPI from "../../api/UserAPI";
 import theme from "../../theme";
 import { LoginState } from "../../types/FormStates";
 import { UserLoginRequest } from "../../types/ApiRequest";
+import { stat } from "fs";
+import { Check } from "@mui/icons-material";
 
 const initialState: LoginState = {
     username: "",
     password: "",
     isLogin: true,
+    isFetching: false,
+    error: "",
+    successMsg: ""
 };
 
 type ACTIONTYPE =
@@ -51,6 +56,8 @@ export default function LoginForm() {
     }
 
     const onLoginToggle: MouseEventHandler<HTMLAnchorElement> = (e) => {
+        dispatch({ type: 'field', fieldName: 'error', payload: '' })
+        dispatch({ type: 'field', fieldName: 'successMsg', payload: '' })
         dispatch({ type: 'field', fieldName: 'username', payload: '' })
         dispatch({ type: 'field', fieldName: 'password', payload: '' })
         dispatch({ type: 'toggle', toggleName: 'isLogin' })
@@ -59,6 +66,17 @@ export default function LoginForm() {
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
 
+        if (state.username.length < 3 ) {
+            dispatch({ type: 'field', fieldName: 'error', payload: 'Username must be at least 3 characters long' })
+            return;
+        } else if (state.password.length < 8) {
+            dispatch({ type: 'field', fieldName: 'error', payload: 'Password must be at least 8 characters long' })
+            return;
+        }
+
+        dispatch({ type: 'field', fieldName: 'error', payload: '' })
+        dispatch({ type: 'toggle', toggleName: 'isFetching' })
+
         const user: UserLoginRequest = {
             id: state.username,
             password: state.password
@@ -66,23 +84,39 @@ export default function LoginForm() {
         if (state.isLogin) {
             auth.login(
                 user,
-                // Navigates user back to where they were redirected
-                () => { navigate(from, { replace: true }) }
+                // Navigates user back to where they were redirected unless there's an error
+                (err) => {
+                    if (err) {
+                        dispatch({ type: 'field', fieldName: 'password', payload: '' })
+                        dispatch({ type: 'field', fieldName: 'error', payload: 'Invalid username or password' })
+                    } else {
+                        navigate(from, { replace: true })
+                    }
+                }
             )
+            dispatch({ type: 'toggle', toggleName: 'isFetching' });
         } else {
-            UserAPI.registerUser(user);
+            UserAPI.registerUser(user)
+                .then(() => dispatch({ type: 'field', fieldName: 'successMsg', payload: 'Account created' })                )
+                .catch((err) => dispatch({ type: 'field', fieldName: 'error', payload: 'Username taken' }))
+                .finally(() => dispatch({ type: 'toggle', toggleName: 'isFetching' }));
         }
     }
 
     return (
         <form>
             <Typography variant="h4" mb={1}>{state.isLogin ? "Log In" : "Register"}</Typography>
+            {
+                state.successMsg &&
+                    <Alert icon={<Check fontSize="inherit" />}  severity="success">{state.successMsg}</Alert>
+            }
             <TextField fullWidth onChange={onUsernameChange}
                 value={state.username}
                 id="username-field"
                 label="Username"
                 variant="outlined"
                 margin="dense"
+                error={state.error !== ""}
             />
             <TextField fullWidth onChange={onPasswordChange}
                 value={state.password}
@@ -91,12 +125,18 @@ export default function LoginForm() {
                 type="password"
                 autoComplete="current-password"
                 margin="dense"
+                error={state.error !== ""}
             />
-            <Button fullWidth onClick={handleSubmit}
-                variant="contained" 
-                sx={{ marginY: theme.spacing(1) }}>
-                {state.isLogin ? "Login" : "Register"}
-            </Button>
+            <Typography variant="subtitle1" color="error">{`${state.error}`}</Typography>
+            {
+                state.isFetching
+                    ? <Button fullWidth variant="contained" disabled>Please Wait</Button>
+                    : <Button fullWidth onClick={handleSubmit}
+                        variant="contained"
+                        sx={{ marginY: theme.spacing(1) }}>
+                        {state.isLogin ? "Login" : "Register"}
+                    </Button>
+            }
             {
                 state.isLogin
                     ? <Typography variant="body1">New to Sakura? <Link onClick={onLoginToggle}>Register</Link></Typography>

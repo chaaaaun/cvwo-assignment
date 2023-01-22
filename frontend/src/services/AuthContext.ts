@@ -4,7 +4,7 @@ import { UserLoginRequest } from "../types/ApiRequest";
 interface AuthContextType {
     user: string;
     setUser: (username: string) => void;
-    login: (user: UserLoginRequest, callback: VoidFunction) => void;
+    login: (user: UserLoginRequest, callback: (error: string) => void) => void;
     logout: (callback: VoidFunction) => void;
   }
   

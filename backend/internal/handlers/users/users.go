@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"os"
 	"time"
@@ -62,7 +63,7 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Create User
 	if err := dataaccess.DbCreateUser(data); err != nil {
-		render.Render(w, r, api.ErrUnprocessable(err))
+		render.Render(w, r, api.ErrUnprocessable(errors.New("username taken")))
 		return
 	}
 
