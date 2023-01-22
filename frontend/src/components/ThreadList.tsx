@@ -17,7 +17,7 @@ function ThreadList(props: { threads: Thread[] }) {
                 <CardActionArea onClick={() => navigate(`/thread/${thread.ID}`)}>
                     <CardContent>
                         <Grid2 container alignItems='center'>
-                            <Grid2 lg={9}>
+                            <Grid2 lg={10}>
                                 <Stack spacing={0.5}>
                                     <TagList tags={thread.Tags} size="small" />
                                     <Typography variant="h5" component="div">{thread.Title}</Typography>
@@ -27,7 +27,7 @@ function ThreadList(props: { threads: Thread[] }) {
                                     </Stack>
                                 </Stack>
                             </Grid2>
-                            <Grid2 lg={3}>
+                            <Grid2 lg={2}>
                                 <Stack spacing={0.5} alignItems='end'>
                                     <Chip variant='outlined' sx={{ border: "none" }} icon={<Person />} label={thread.UserID} />
                                     <Typography variant="body1">Updated {thread.UpdatedAt}</Typography>

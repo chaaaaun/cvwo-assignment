@@ -49,18 +49,16 @@ func DbCreateThread(threadData *api.ThreadRequest, user string) error {
 	return nil
 }
 
-func DbUpdateThread(newThreadData *api.ThreadRequest, thread *models.Thread) error {
-	if result := database.DB.Model(&thread).Updates(newThreadData); result.Error != nil {
+func DbUpdateThread(thread *models.Thread) error {
+	if result := database.DB.Save(&thread); result.Error != nil {
 		return result.Error
 	}
-
 	return nil
 }
 
-func DbDeleteThread(newThreadData *api.ThreadRequest, thread *models.Thread) error {
-	if result := database.DB.Model(&thread).Updates(newThreadData); result.Error != nil {
+func DbDeleteThread(thread *models.Thread) error {
+	if result := database.DB.Delete(&thread); result.Error != nil {
 		return result.Error
 	}
-
 	return nil
 }

@@ -1,20 +1,11 @@
-import { Button, InputAdornment, Link, TextField, Typography } from "@mui/material";
-import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import CommentAPI from "../../api/CommentAPI";
-import theme from "../../theme";
-import { LoginState, ThreadState } from "../../types/FormStates";
-import { ThreadRequest, UserLoginRequest } from "../../types/ApiRequest";
+import { Button, InputAdornment, TextField } from "@mui/material";
+import { ChangeEventHandler, FormEventHandler, useReducer } from "react";
+import { useNavigate } from "react-router-dom";
 import ThreadAPI from "../../api/ThreadAPI";
+import theme from "../../theme";
+import { ThreadRequest } from "../../types/ApiRequest";
 import { Thread } from "../../types/DataModels";
-
-const initialState: ThreadState = {
-    title: "",
-    content: "",
-    tags: "",
-    isFetching: false,
-    error: "",
-};
+import { ThreadState } from "../../types/FormStates";
 
 type ACTIONTYPE =
     | { type: "field"; fieldName: string; payload: string }
@@ -40,13 +31,14 @@ function reducer(state: ThreadState, action: ACTIONTYPE) {
 export default function ThreadForm(props: { thread?: Thread }) {
     const navigate = useNavigate();
 
-    let initialState: ThreadState = {
+    const initialState: ThreadState = {
         title: "",
         content: "",
         tags: "",
         isFetching: false,
         error: ""
-    };
+    }
+    // Update state details if its an edit
     if (props.thread) {
         initialState.title = props.thread.Title
         initialState.content = props.thread.Content
@@ -70,6 +62,13 @@ export default function ThreadForm(props: { thread?: Thread }) {
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
 
+        // Validate tag input to only alphanumeric and semicolons
+        const tagRegex = /^([0-9;]|[a-z;])*([0-9a-z;]*)$/gi
+        if (!state.tags.match(tagRegex)) {
+            dispatch({ type: 'field', fieldName: 'error', payload: "Tag error" })
+            return;
+        }
+
         dispatch({ type: 'toggle', toggleName: 'isFetching' })
 
         const thread: ThreadRequest = {
@@ -78,10 +77,18 @@ export default function ThreadForm(props: { thread?: Thread }) {
             tags: state.tags
         }
 
-        ThreadAPI.createThread(thread)
-            .then(() => navigate("/"))
-            .catch(err => dispatch({ type: 'field', fieldName: 'error', payload: err }))
-            .finally(() => dispatch({ type: 'toggle', toggleName: 'isFetching' }));
+        if (props.thread) {
+            ThreadAPI.updateThread(thread, props.thread.ID)
+                .then(() => navigate(-1))
+                .catch(err => dispatch({ type: 'field', fieldName: 'error', payload: err }))
+                .finally(() => dispatch({ type: 'toggle', toggleName: 'isFetching' }));
+
+        } else {
+            ThreadAPI.createThread(thread)
+                .then(() => navigate("/"))
+                .catch(err => dispatch({ type: 'field', fieldName: 'error', payload: err }))
+                .finally(() => dispatch({ type: 'toggle', toggleName: 'isFetching' }));
+        }
     }
 
     return (
@@ -107,13 +114,20 @@ export default function ThreadForm(props: { thread?: Thread }) {
                 multiline
                 rows={4}
                 margin="dense"
+                inputProps={{
+                    maxLength: 10000,
+                }}
             />
             <TextField fullWidth onChange={onTagsChange}
                 value={state.tags}
                 id="tags-field"
                 label="Tags (optional)"
                 margin="dense"
-                helperText="Tags can only be alphanumeric characters, delineated by semicolons"
+                error={state.error.match("Tag error") !== null}
+                helperText="Tags can only be alphanumeric characters, separated by semicolons"
+                inputProps={{
+                    maxLength: 1000,
+                }}
             />
             {
                 state.title.length === 0
@@ -126,7 +140,7 @@ export default function ThreadForm(props: { thread?: Thread }) {
                         Post
                     </Button>
             }
-            
+
         </form>
     );
 }

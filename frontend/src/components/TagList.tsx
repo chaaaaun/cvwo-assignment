@@ -1,14 +1,16 @@
-import { Chip, Stack } from "@mui/material";
-import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
+import { Chip, Grid } from "@mui/material";
 
 function TagList(props: { tags: string, size: "small" | "medium" }) {
     const listItems = props.tags.split(";").map((tag) =>
-        (tag.length !== 0) && <Chip size={props.size} label={tag} key={tag} variant="outlined" />
+        (tag.length !== 0) && 
+        <Grid item flexShrink="1">
+            <Chip size={props.size} label={tag} key={tag} variant="outlined" />
+        </Grid>
     );
     return (
-        <Stack direction='row' spacing={0.5}>
+        <Grid container spacing={0.5} overflow="hidden">
             {listItems}
-        </Stack>
+        </Grid>
     );
 }
 

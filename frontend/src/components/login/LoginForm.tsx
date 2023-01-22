@@ -1,13 +1,12 @@
+import { Check } from "@mui/icons-material";
 import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../services/AuthContext";
 import UserAPI from "../../api/UserAPI";
+import { useAuth } from "../../services/AuthContext";
 import theme from "../../theme";
-import { LoginState } from "../../types/FormStates";
 import { UserLoginRequest } from "../../types/ApiRequest";
-import { stat } from "fs";
-import { Check } from "@mui/icons-material";
+import { LoginState } from "../../types/FormStates";
 
 const initialState: LoginState = {
     username: "",
@@ -97,7 +96,11 @@ export default function LoginForm() {
             dispatch({ type: 'toggle', toggleName: 'isFetching' });
         } else {
             UserAPI.registerUser(user)
-                .then(() => dispatch({ type: 'field', fieldName: 'successMsg', payload: 'Account created' })                )
+                .then(() => {
+                    dispatch({ type: 'field', fieldName: 'successMsg', payload: 'Account created' })
+                    dispatch({ type: 'field', fieldName: 'username', payload: '' })
+                    dispatch({ type: 'field', fieldName: 'password', payload: '' })
+                })
                 .catch((err) => dispatch({ type: 'field', fieldName: 'error', payload: 'Username taken' }))
                 .finally(() => dispatch({ type: 'toggle', toggleName: 'isFetching' }));
         }

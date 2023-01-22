@@ -12,6 +12,7 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
             ? props.comment.Content
             : ""
     );
+    const [error, setError] = useState<string>("")
     const auth = useAuth();
 
     const onContentChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -20,17 +21,26 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
 
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
+        setError("")
+        if (!content) {
+            setError("Comment cannot be empty");
+            return;
+        }
 
         if (!props.comment) {
             const comment: CommentRequest = {
                 content: content
             }
-            CommentAPI.createComment(comment, props.threadId).catch(err => console.error(err));
+            CommentAPI.createComment(comment, props.threadId)
+                .then(() => window.location.reload())
+                .catch(err => setError(err));
         } else {
             const comment: CommentRequest = {
                 content: content
             }
-            CommentAPI.updateComment(comment, props.threadId, props.comment.ID).catch(err => console.error(err));
+            CommentAPI.updateComment(comment, props.threadId, props.comment.ID)
+                .then(() => window.location.reload())
+                .catch(err => setError(err));
         }
     }
 
@@ -43,6 +53,11 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
                 multiline
                 rows={4}
                 margin="dense"
+                inputProps={{
+                    maxLength: 3000,
+                }}
+                error={error.length !== 0}
+                helperText={`${error}`}
             />
             {
                 auth.user

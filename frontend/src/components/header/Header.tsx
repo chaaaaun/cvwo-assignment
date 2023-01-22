@@ -2,35 +2,10 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
-import Cookies from 'js-cookie';
-import { useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
-import UserAPI from '../../api/UserAPI';
-import { useAuth } from '../../services/AuthContext';
 import UserStatus from "./UserStatus";
 
 function Header() {
-    const isInitialMount = useRef(true);
-    const auth = useAuth();
-
-    const checkJwt = () => {
-        let token = Cookies.get("jwt")
-        if (token !== undefined) {
-            UserAPI.getUser()
-                .then((data) => {
-                    auth.setUser(data.user)
-                })
-                .catch(() => auth.logout(() => {}))
-        }
-    }
-
-    useEffect(() => {
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-            checkJwt();
-         }
-    }, [])
-
     return (
         <Stack direction="row" spacing={2} sx={{
             justifyContent: "center",

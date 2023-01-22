@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Header from './components/header/Header';
 import LoginForm from './components/login/LoginForm';
 import CreateNewThread from './pages/CreateNewThread';
+import EditThread from './pages/EditThread';
 import Landing from './pages/Landing';
 import ThreadView from './pages/ThreadView';
 import { AuthProvider, RequireAuth } from './services/AuthProvider';
@@ -20,6 +21,13 @@ function App() {
                             element={
                                 <RequireAuth>
                                     <CreateNewThread />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route path="/thread/edit"
+                            element={
+                                <RequireAuth>
+                                    <EditThread />
                                 </RequireAuth>
                             }
                         />

@@ -1,5 +1,4 @@
-import { Box, Button, Typography } from '@mui/material';
-import { Stack } from '@mui/system';
+import { Box, Typography } from '@mui/material';
 import { useEffect, useRef, useState } from 'react';
 import ThreadAPI from '../api/ThreadAPI';
 import { ErrorDialog } from '../components/ErrorDialog';

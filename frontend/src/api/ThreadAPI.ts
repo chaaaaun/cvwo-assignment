@@ -26,5 +26,25 @@ const getThreadDetails = async (id: string) => {
     return await res.json() as GetResponse<Thread>;
 }
 
-const ThreadAPI = { createThread, getThreads, getThreadDetails };
+const updateThread = async (thread: ThreadRequest, id: string) => {
+    let res = await fetch(`/api/auth/thread/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(thread),
+    })
+    if (!res.ok) { throw new Error(res.statusText) }
+    return;
+}
+
+const deleteThread = async (id: string) => {
+    let res = await fetch(`/api/auth/thread/${id}`, {
+        method: 'DELETE'
+    })
+    if (!res.ok) { throw new Error(res.statusText) }
+    return;
+}
+
+const ThreadAPI = { createThread, getThreads, getThreadDetails, updateThread, deleteThread };
 export default ThreadAPI;

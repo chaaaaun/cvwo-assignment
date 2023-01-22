@@ -1,7 +1,10 @@
 import { Box, Typography } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import ThreadForm from '../components/forms/ThreadForm';
 
-export default function CreateNewThread() {
+export default function EditThread() {
+    const { state } = useLocation();
+    
     return (
         <Box sx={{
             backgroundColor: "#ffffff0d",
@@ -9,8 +12,8 @@ export default function CreateNewThread() {
             padding: "20px"
         }}>
 
-            <Typography variant='h4'>Create a thread</Typography>
-            <ThreadForm />
+            <Typography variant='h4'>Edit thread</Typography>
+            <ThreadForm thread={state.thread} />
         </Box>
     );
 };

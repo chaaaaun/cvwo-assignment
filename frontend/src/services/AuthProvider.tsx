@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Cookies from 'js-cookie';
 import { Navigate, useLocation } from "react-router-dom";
 import { UserLoginRequest } from "../types/ApiRequest";
@@ -6,6 +6,7 @@ import { AuthContext } from "./AuthContext";
 import UserAPI from "../api/UserAPI";
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+    const isInitialMount = useRef(true);
     let [user, setUser] = React.useState<string>("");
 
     let login = (newUser: UserLoginRequest, callback: (error: string) => void) => {
@@ -21,6 +22,21 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser("")
         callback();
     };
+
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            
+            let token = Cookies.get("jwt")
+            if (token !== undefined) {
+                UserAPI.getUser()
+                    .then((data) => {
+                        setUser(data.user)
+                    })
+                    .catch(() => logout(() => {}))
+            }
+         }
+    }, [])
 
     let value = { user, setUser, login, logout };
 

@@ -109,9 +109,30 @@ func CreateThread(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateThread(w http.ResponseWriter, r *http.Request) {
+	// Get context info
+	thread := r.Context().Value(models.ThreadContextKey{}).(*models.Thread)
+	// Bind request body
+	data := &api.ThreadRequest{}
+	if err := render.Bind(r, data); err != nil {
+		render.Render(w, r, api.ErrBadRequest(err))
+		return
+	}
+	thread.Title = data.Title
+	thread.Content = data.Content
+	thread.Tags = data.Tags
+	if err := dataaccess.DbUpdateThread(thread); err != nil {
+		render.Render(w, r, api.ErrUnprocessable(err))
+		return
+	}
 
+	render.Status(r, http.StatusOK)
 }
 
 func DeleteThread(w http.ResponseWriter, r *http.Request) {
-
+	thread := r.Context().Value(models.ThreadContextKey{}).(*models.Thread)
+	if err := dataaccess.DbDeleteThread(thread); err != nil {
+		render.Render(w, r, api.ErrUnprocessable(err))
+		return
+	}
+	render.Status(r, http.StatusOK)
 }

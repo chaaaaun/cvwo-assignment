@@ -31,7 +31,7 @@ const updateComment = async (comment: CommentRequest, threadID: string, commentI
         body: JSON.stringify(comment),
     });
     if (!res.ok) { throw new Error(res.statusText) }
-    return await res.json() as GetResponse<Comment>;
+    return;
 }
 
 const deleteComment = async (threadID: string, commentID: string) => {
@@ -39,7 +39,7 @@ const deleteComment = async (threadID: string, commentID: string) => {
         method: 'DELETE',
     });
     if (!res.ok) { throw new Error(res.statusText) }
-    return await res.json() as GetResponse<Comment>;
+    return;
 }
 
 const CommentAPI = { getComments, createComment, updateComment, deleteComment }
