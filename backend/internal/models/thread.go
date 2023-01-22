@@ -12,7 +12,6 @@ type Thread struct {
 	Title    string
 	Content  string
 	Views    int
-	Likes    int
 	Tags     string
 	Comments []Comment
 	UserID   string

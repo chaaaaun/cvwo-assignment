@@ -2,10 +2,35 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputAdornment, TextField, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
+import Cookies from 'js-cookie';
+import { useRef, useEffect } from 'react';
 import { Link } from "react-router-dom";
+import UserAPI from '../../api/UserAPI';
+import { useAuth } from '../../services/AuthContext';
 import UserStatus from "./UserStatus";
 
 function Header() {
+    const isInitialMount = useRef(true);
+    const auth = useAuth();
+
+    const checkJwt = () => {
+        let token = Cookies.get("jwt")
+        if (token !== undefined) {
+            UserAPI.getUser()
+                .then((data) => {
+                    auth.setUser(data.user)
+                })
+                .catch(() => auth.logout(() => {}))
+        }
+    }
+
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            checkJwt();
+         }
+    }, [])
+
     return (
         <Stack direction="row" spacing={2} sx={{
             justifyContent: "center",
@@ -16,16 +41,7 @@ function Header() {
             marginBottom: "15px"
         }}>
             <Stack direction="row" spacing={1} alignItems="center" component={Link} to="/" sx={{ textDecoration: "none", color: 'white'}}>
-                {/* <Box
-                    component="img"
-                    sx={{
-                        height: 64,
-                        width: 64,
-                    }}
-                    alt="The house from the offer."
-                    src={process.env.PUBLIC_URL + "/logo512.png"}
-                /> */}
-                <Typography variant="h2">Sakura</Typography>
+                <Typography variant="h2" sx={{ fontFamily: '"Water Brush", cursive' }} ><span style={{ color: '#ffb7c5' }}>S</span>akura</Typography>
             </Stack>
             <TextField
                 fullWidth

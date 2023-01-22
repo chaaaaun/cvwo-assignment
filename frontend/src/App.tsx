@@ -1,30 +1,31 @@
 import { Container } from '@mui/material';
-import React, { FormEventHandler } from 'react';
-import { Routes, Route, Navigate, useLocation, Link } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Header from './components/header/Header';
+import LoginForm from './components/login/LoginForm';
 import CreateNewThread from './pages/CreateNewThread';
 import Landing from './pages/Landing';
-import LoginForm from './components/login/LoginForm';
-import { AuthProvider, RequireAuth } from './services/AuthProvider';
 import ThreadView from './pages/ThreadView';
+import { AuthProvider, RequireAuth } from './services/AuthProvider';
 
 function App() {
     return (
-        <Container maxWidth="lg">
+        <Container maxWidth="xl">
             <AuthProvider>
                 <Header />
-                <Routes>
-                    <Route path="/" element={<Landing />} />
-                    <Route path="/login" element={<LoginForm />} />
-                    <Route path="/thread/new"
-                        element={
-                            <RequireAuth>
-                                <CreateNewThread />
-                            </RequireAuth>
-                        }
-                    />
-                    <Route path="/thread/:threadId" element={<ThreadView />} />
-                </Routes>
+                <Container maxWidth="lg">
+                    <Routes>
+                        <Route path="/" element={<Landing />} />
+                        <Route path="/login" element={<LoginForm />} />
+                        <Route path="/thread/new"
+                            element={
+                                <RequireAuth>
+                                    <CreateNewThread />
+                                </RequireAuth>
+                            }
+                        />
+                        <Route path="/thread/:threadId" element={<ThreadView />} />
+                    </Routes>
+                </Container>
             </AuthProvider>
         </Container>
     );

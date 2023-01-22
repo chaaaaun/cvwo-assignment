@@ -6,7 +6,6 @@ export type Thread = {
     Title: string;
     Content: string;
     Views: number;
-    Likes: number;
     Tags: string;
     Comments: number[] | null;
     UserID: string;

@@ -1,11 +1,10 @@
-import { Box, Button, Skeleton, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import ThreadAPI from '../api/ThreadAPI';
 import SkeletonList from '../components/SkeletonList';
 import ThreadList from '../components/ThreadList';
-import ApiService from '../api/CommentAPI';
 import { Thread } from "../types/DataModels";
-import ThreadAPI from '../api/ThreadAPI';
 
 function Landing() {
     const isInitialMount = useRef(true);

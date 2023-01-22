@@ -22,7 +22,7 @@ func DbListThreads(page int) (*[]models.Thread, int, error) {
 	// Get 10 entries with page offset
 	offset := (page - 1) * 10
 	// Get only necessary info
-	selection := []string{"id", "created_at", "updated_at", "title", "views", "likes", "tags", "user_id"}
+	selection := []string{"id", "created_at", "updated_at", "title", "views", "tags", "user_id"}
 	database.DB.Limit(10).Offset(offset).Select(selection).Order("updated_at desc").Find(&threads)
 
 	// Get total thread count
@@ -38,7 +38,6 @@ func DbCreateThread(threadData *api.ThreadRequest, user string) error {
 		Title:   threadData.Title,
 		Content: threadData.Content,
 		Tags:    threadData.Tags,
-		Likes:   0,
 		Views:   0,
 		UserID:  user,
 	}

@@ -1,4 +1,4 @@
-import { AccessTime, AccessTimeFilled, Comment, Person, ThumbUp, Visibility } from "@mui/icons-material";
+import { Comment, Person, Visibility } from "@mui/icons-material";
 import { Card, CardActionArea, CardContent, Chip, Typography } from "@mui/material";
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Stack } from "@mui/system";
@@ -23,7 +23,6 @@ function ThreadList(props: { threads: Thread[] }) {
                                     <Typography variant="h5" component="div">{thread.Title}</Typography>
                                     <Stack direction='row' spacing={0.5}>
                                         <Chip variant='outlined' sx={{ border: "none" }} icon={<Comment />} label={thread.Comments ? thread.Comments.length : 0} />
-                                        <Chip variant='outlined' sx={{ border: "none" }} icon={<ThumbUp />} label={thread.Likes} />
                                         <Chip variant='outlined' sx={{ border: "none" }} icon={<Visibility />} label={thread.Views} />
                                     </Stack>
                                 </Stack>

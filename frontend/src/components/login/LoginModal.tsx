@@ -22,24 +22,7 @@ const modalStyle = {
 
 export default function LoginModal() {
     const [open, setOpen] = React.useState(false);
-    const auth = useAuth();
-    const navigate = useNavigate();
-
-    const checkJwt = () => {
-        let token = Cookies.get("jwt")
-        if (token !== undefined) {
-            UserAPI.getUser()
-                .then((data) => {
-                    auth.setUser(data.user)
-                    navigate("/")
-                })
-                .catch(() => auth.logout(() => {}))
-        } else {
-            setOpen(true);
-        }
-    }
-
-    const handleOpen = () => checkJwt();
+    const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     return (
