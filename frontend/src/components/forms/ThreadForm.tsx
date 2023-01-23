@@ -140,7 +140,6 @@ export default function ThreadForm(props: { thread?: Thread }) {
                         Post
                     </Button>
             }
-
         </form>
     );
 }

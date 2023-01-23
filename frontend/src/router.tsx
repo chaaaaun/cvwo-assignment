@@ -1,6 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
 import CommentList, { commentsLoader } from "./components/CommentList";
+import LoginForm from "./components/login/LoginForm";
+import NotFound from "./components/NotFound";
 import CreateNewThread from "./pages/CreateThread";
 import EditThread from "./pages/EditThread";
 import ErrorPage from "./pages/ErrorPage";
@@ -39,6 +41,14 @@ const router = createBrowserRouter([
             {
                 path: "thread/edit",
                 element: <RequireAuth><EditThread /></RequireAuth>,
+            },
+            {
+                path: "login",
+                element: <LoginForm />
+            },
+            {
+                path: "*",
+                element: <NotFound />
             }
         ]
     },

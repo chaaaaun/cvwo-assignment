@@ -1,8 +1,7 @@
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import SearchIcon from '@mui/icons-material/Search';
-import { IconButton, InputAdornment, TextField, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { Link } from "react-router-dom";
+import SearchForm from '../SearchBar';
 import UserStatus from "./UserStatus";
 
 function Header() {
@@ -18,16 +17,7 @@ function Header() {
             <Stack direction="row" spacing={1} alignItems="center" component={Link} to="/" sx={{ textDecoration: "none", color: 'white'}}>
                 <Typography variant="h2" sx={{ fontFamily: '"Water Brush", cursive' }} ><span style={{ color: '#ffb7c5' }}>S</span>akura</Typography>
             </Stack>
-            <TextField
-                fullWidth
-                id="searchbar"
-                InputProps={{
-                    startAdornment: <InputAdornment position="start"><SearchIcon /></InputAdornment>,
-                    endAdornment:
-                        <InputAdornment position="end">
-                            <IconButton aria-label="search"><ArrowForwardIcon /></IconButton>
-                        </InputAdornment>
-                }} />
+            <SearchForm />
             <UserStatus />
         </Stack>
     )

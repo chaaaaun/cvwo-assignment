@@ -1,7 +1,7 @@
 import { Check } from "@mui/icons-material";
 import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { redirect, useLocation, useNavigate } from "react-router-dom";
 import UserAPI from "../../api/UserAPI";
 import { useAuth } from "../../services/AuthContext";
 import theme from "../../theme";
@@ -40,11 +40,14 @@ function reducer(state: LoginState, action: ACTIONTYPE) {
 
 export default function LoginForm() {
     const [state, dispatch] = useReducer(reducer, initialState);
+    const navigate = useNavigate();
+    const location = useLocation();
+    const auth = useAuth();
+    const from = location.state?.from?.pathname || "/";
 
-    let navigate = useNavigate();
-    let location = useLocation();
-    let auth = useAuth();
-    let from = location.state?.from?.pathname || "/";
+    if (auth.user) {
+        redirect("/")
+    }
 
     const onUsernameChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         dispatch({ type: 'field', fieldName: 'username', payload: e.currentTarget.value })

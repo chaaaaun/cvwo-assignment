@@ -18,3 +18,10 @@ export type ThreadState = {
 export type CommentState = {
     content: string;
 }
+
+export type SearchFormState = {
+    tags: string;
+    user: string;
+    sort: string;
+    order: "asc" | "desc";
+}

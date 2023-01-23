@@ -3,6 +3,7 @@ package threads
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -76,7 +77,60 @@ func ListThreads(w http.ResponseWriter, r *http.Request) {
 }
 
 func SearchThreads(w http.ResponseWriter, r *http.Request) {
+	var filters = make(map[string]string)
+	var order = "updated_at desc"
+	var page int = 1
+	var nextPage int = 2
+	var previousPage int = 0
+	var err error
+	// Read pagination info
+	if pageStr := r.URL.Query().Get("page"); pageStr != "" {
+		page, err = strconv.Atoi(pageStr)
+		if err != nil {
+			render.Render(w, r, api.ErrBadRequest(errors.New("invalid page number")))
+		} else if page <= 0 {
+			render.Render(w, r, api.ErrBadRequest(errors.New("page number must be positive")))
+		}
+	}
 
+	if page > 1 {
+		nextPage = page + 1
+		previousPage = page - 1
+	}
+
+	if query := r.URL.Query().Get("q"); query != "" {
+		filters["query"] = query
+	}
+
+	if tags := r.URL.Query().Get("tags"); tags != "" {
+		filters["tags"] = tags
+	}
+
+	if user := r.URL.Query().Get("user"); user != "" {
+		filters["user"] = user
+	}
+
+	if sort := r.URL.Query().Get("sort"); sort != "" {
+		order = fmt.Sprintf("%s %s", sort, r.URL.Query().Get("order"))
+	}
+
+	println(filters["user"])
+
+	// Get threads
+	if threads, total, err := dataaccess.DbFilterThreads(page, filters, order); err != nil {
+		render.Render(w, r, api.ErrBadRequest(err))
+	} else {
+		render.Status(r, http.StatusOK)
+		render.JSON(w, r, &api.ThreadResponse{
+			Metadata: api.PaginationMetadata{
+				NextPage:     nextPage,
+				PreviousPage: previousPage,
+				CurrentPage:  page,
+				TotalPages:   total,
+			},
+			Payload: *threads,
+		})
+	}
 }
 
 func GetThread(w http.ResponseWriter, r *http.Request) {

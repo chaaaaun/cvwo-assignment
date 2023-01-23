@@ -5,6 +5,7 @@ import (
 
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // Reusable DB connection
@@ -15,7 +16,7 @@ func GetDB() error {
 	// Opens the connection
 	dsn := os.Getenv("DB_STR")
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
-		// Logger: logger.Default.LogMode(logger.Info),
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 
 	if err != nil {

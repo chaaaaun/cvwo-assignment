@@ -22,6 +22,16 @@ const getThreads = async (page: string) => {
     return await res.json() as GetResponse<Thread>;
 }
 
+const searchThreads = async (page: string, filters: string) => {
+    console.log(page);
+    
+    let res = await fetch(`/api/thread/search?${filters}&` + new URLSearchParams({
+        page: page,
+    }));
+    if (!res.ok) { throw new Error(res.statusText) }
+    return await res.json() as GetResponse<Thread>;
+}
+
 const getThreadDetails = async (id: string) => {
     let res = await fetch(`/api/thread/${id}`);
     if (!res.ok) { throw new Error(res.statusText) }
@@ -48,5 +58,5 @@ const deleteThread = async (id: string) => {
     return;
 }
 
-const ThreadAPI = { createThread, getThreads, getThreadDetails, updateThread, deleteThread };
+const ThreadAPI = { createThread, getThreads, searchThreads, getThreadDetails, updateThread, deleteThread };
 export default ThreadAPI;

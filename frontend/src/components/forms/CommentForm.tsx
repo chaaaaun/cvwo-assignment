@@ -1,5 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import CommentAPI from "../../api/CommentAPI";
 import { useAuth } from "../../services/AuthContext";
 import theme from "../../theme";
@@ -7,6 +8,9 @@ import { CommentRequest } from "../../types/ApiRequest";
 import { Comment } from "../../types/DataModels";
 
 export default function CommentForm(props: { threadId: string, comment?: Comment }) {
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+    
     const [content, setContent] = useState<string>(
         props.comment
             ? props.comment.Content
@@ -32,15 +36,16 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
                 content: content
             }
             CommentAPI.createComment(comment, props.threadId)
-                .then(() => window.location.reload())
-                .catch(err => setError(err));
+                .then(() => {navigate(`${pathname}/../1`, { replace: true })})
+                .catch(err => setError(err))
+                .finally(() => setContent(""));
         } else {
             const comment: CommentRequest = {
                 content: content
             }
             CommentAPI.updateComment(comment, props.threadId, props.comment.ID)
-                .then(() => window.location.reload())
-                .catch(err => setError(err));
+                .then(() => {navigate(`${pathname}/../1`, { replace: true })})
+                .catch(err => setError(err))
         }
     }
 

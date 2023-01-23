@@ -26,7 +26,7 @@ function CommentList() {
         )
     });
     return (
-        <Stack spacing={1} justifyContent="center">
+        <Stack spacing={1}>
             {listItems.length !== 0
                 ? listItems
                 : <Typography variant="h5">{`No comments yet :( Write one?`}</Typography>

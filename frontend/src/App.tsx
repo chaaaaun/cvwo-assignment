@@ -1,25 +1,29 @@
 import { Container } from '@mui/material';
-import { useEffect, useRef } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useLocation, useNavigate, useNavigation } from 'react-router-dom';
 import Header from './components/header/Header';
 
-function App() {
-    let isInitialLoad = useRef(true);
+
+export default function App() {
+    const navigation = useNavigation();
     const navigate = useNavigate();
+    const { pathname } = useLocation();
+
     useEffect(() => {
-        if (isInitialLoad.current) {
-            isInitialLoad.current = false;
-            navigate("/threads/1", { replace: true })
+        if (pathname === "/") {
+            navigate("/threads/1")
         }
-    }, [])
+    }, [pathname])
+
     return (
         <Container maxWidth="xl">
-                <Header />
-                <Container maxWidth="lg">
-                    <Outlet />
-                </Container>
+            <Header />
+            <Container maxWidth="lg"
+                className={
+                    navigation.state === "loading" ? "loading" : ""
+                }>
+                <Outlet />
+            </Container>
         </Container>
     );
 }
-
-export default App;

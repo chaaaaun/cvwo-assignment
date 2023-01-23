@@ -6,9 +6,20 @@ import ThreadList from '../components/ThreadList';
 import { GetResponse } from '../types/ApiResponse';
 import { Thread } from "../types/DataModels";
 
-export async function threadListLoader({ params }: any) {
-    const threads = await ThreadAPI.getThreads(params.page ? params.page : "1");
-    return threads;
+export async function threadListLoader({ request, params }: any) {
+    const url = new URL(request.url);
+    const searchParams = url.searchParams.toString();
+
+    if (searchParams) {
+        const threads = await ThreadAPI.searchThreads(
+            params.page ? params.page : "1",
+            searchParams
+            );
+        return threads;
+    } else {
+        const threads = await ThreadAPI.getThreads(params.page ? params.page : "1");
+        return threads;
+    }
 }
 
 function ThreadListPage() {
@@ -21,7 +32,7 @@ function ThreadListPage() {
     };
 
     return (
-        <Stack>
+        <Stack spacing={1} mb={1}>
             {threads.data.length !== 0
                 ? <ThreadList threads={threads.data} />
                 : <Typography variant='h4'>{`No threads yet :( Create one?`}</Typography>
