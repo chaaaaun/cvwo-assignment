@@ -14,8 +14,10 @@ const createThread = async (thread: ThreadRequest) => {
     return;
 }
 
-const getThreads = async () => {
-    let res = await fetch("/api/thread");
+const getThreads = async (page: string) => {
+    let res = await fetch("/api/thread?" + new URLSearchParams({
+        page: page,
+    }));
     if (!res.ok) { throw new Error(res.statusText) }
     return await res.json() as GetResponse<Thread>;
 }

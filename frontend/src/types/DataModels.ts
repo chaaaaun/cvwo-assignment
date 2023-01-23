@@ -20,3 +20,9 @@ export type Comment = {
     ThreadID: string;
     UserID: string;
 }
+
+export type ErrorObj = {
+    statusCode: number;
+    statusText: string;
+    message: string;
+}

@@ -2,6 +2,7 @@ import { CommentRequest } from "../types/ApiRequest";
 import { GetResponse } from "../types/ApiResponse";
 import { Comment } from "../types/DataModels";
 
+// POSTs payload
 const createComment = async (comment: CommentRequest, threadID: string) => {
     let res = await fetch(`/api/auth/thread/${threadID}/comment`, {
         method: 'POST',

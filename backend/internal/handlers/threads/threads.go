@@ -39,37 +39,40 @@ func ThreadCtx(next http.Handler) http.Handler {
 }
 
 func ListThreads(w http.ResponseWriter, r *http.Request) {
-	var page int = 0
-	var nextPage int = 1
+	var page int = 1
+	var nextPage int = 2
 	var previousPage int = 0
 	var err error
 	// Read pagination info
-	if pageStr := chi.URLParam(r, "page"); pageStr != "" {
+	if pageStr := r.URL.Query().Get("page"); pageStr != "" {
 		page, err = strconv.Atoi(pageStr)
 		if err != nil {
-			render.Render(w, r, api.ErrNotFound(err))
-		} else if page < 0 {
-			render.Render(w, r, api.ErrBadRequest(errors.New("page number cannot be negative")))
+			render.Render(w, r, api.ErrBadRequest(errors.New("invalid page number")))
+		} else if page <= 0 {
+			render.Render(w, r, api.ErrBadRequest(errors.New("page number must be positive")))
 		}
 	}
 
-	if page > 0 {
+	if page > 1 {
 		nextPage = page + 1
 		previousPage = page - 1
 	}
 
 	// Get threads
-	threads, total, _ := dataaccess.DbListThreads(page)
-
-	render.JSON(w, r, &api.ThreadResponse{
-		Metadata: api.PaginationMetadata{
-			NextPage:     nextPage,
-			PreviousPage: previousPage,
-			CurrentPage:  page,
-			TotalPages:   total,
-		},
-		Payload: *threads,
-	})
+	if threads, total, err := dataaccess.DbListThreads(page); err != nil {
+		render.Render(w, r, api.ErrBadRequest(err))
+	} else {
+		render.Status(r, http.StatusOK)
+		render.JSON(w, r, &api.ThreadResponse{
+			Metadata: api.PaginationMetadata{
+				NextPage:     nextPage,
+				PreviousPage: previousPage,
+				CurrentPage:  page,
+				TotalPages:   total,
+			},
+			Payload: *threads,
+		})
+	}
 }
 
 func SearchThreads(w http.ResponseWriter, r *http.Request) {

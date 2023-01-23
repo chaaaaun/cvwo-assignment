@@ -1,6 +1,7 @@
 package dataaccess
 
 import (
+	"errors"
 	"math"
 
 	"github.com/chauuun/cvwo-assignment/backend/internal/api"
@@ -21,14 +22,19 @@ func DbListThreads(page int) (*[]models.Thread, int, error) {
 	var threads []models.Thread
 	// Get 10 entries with page offset
 	offset := (page - 1) * 10
-	// Get only necessary info
-	selection := []string{"id", "created_at", "updated_at", "title", "views", "tags", "user_id"}
-	database.DB.Limit(10).Offset(offset).Select(selection).Order("updated_at desc").Find(&threads)
 
 	// Get total thread count
 	var count int64
 	database.DB.Model(&models.Thread{}).Count(&count)
 	totalPages := math.Ceil(float64(count) / float64(10))
+
+	if page > int(totalPages) {
+		return nil, 0, errors.New("page out of range")
+	}
+
+	// Get only necessary info
+	selection := []string{"id", "created_at", "updated_at", "title", "views", "tags", "user_id"}
+	database.DB.Limit(10).Offset(offset).Select(selection).Order("updated_at desc").Find(&threads)
 
 	return &threads, int(totalPages), nil
 }

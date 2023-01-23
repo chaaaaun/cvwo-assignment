@@ -1,10 +1,10 @@
 import { Chip, Grid } from "@mui/material";
 
 function TagList(props: { tags: string, size: "small" | "medium" }) {
-    const listItems = props.tags.split(";").map((tag) =>
+    const listItems = props.tags.split(";").map((tag, idx) =>
         (tag.length !== 0) && 
-        <Grid item flexShrink="1">
-            <Chip size={props.size} label={tag} key={tag} variant="outlined" />
+        <Grid item key={idx}>
+            <Chip size={props.size} label={tag} variant="outlined" />
         </Grid>
     );
     return (

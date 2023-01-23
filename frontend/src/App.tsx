@@ -1,40 +1,23 @@
 import { Container } from '@mui/material';
-import { Route, Routes } from 'react-router-dom';
+import { useEffect, useRef } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Header from './components/header/Header';
-import LoginForm from './components/login/LoginForm';
-import CreateNewThread from './pages/CreateNewThread';
-import EditThread from './pages/EditThread';
-import Landing from './pages/Landing';
-import ThreadView from './pages/ThreadView';
-import { AuthProvider, RequireAuth } from './services/AuthProvider';
 
 function App() {
+    let isInitialLoad = useRef(true);
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (isInitialLoad.current) {
+            isInitialLoad.current = false;
+            navigate("/threads/1", { replace: true })
+        }
+    }, [])
     return (
         <Container maxWidth="xl">
-            <AuthProvider>
                 <Header />
                 <Container maxWidth="lg">
-                    <Routes>
-                        <Route path="/" element={<Landing />} />
-                        <Route path="/login" element={<LoginForm />} />
-                        <Route path="/thread/new"
-                            element={
-                                <RequireAuth>
-                                    <CreateNewThread />
-                                </RequireAuth>
-                            }
-                        />
-                        <Route path="/thread/edit"
-                            element={
-                                <RequireAuth>
-                                    <EditThread />
-                                </RequireAuth>
-                            }
-                        />
-                        <Route path="/thread/:threadId" element={<ThreadView />} />
-                    </Routes>
+                    <Outlet />
                 </Container>
-            </AuthProvider>
         </Container>
     );
 }
