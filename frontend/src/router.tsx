@@ -1,14 +1,14 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "./App";
-import CommentList, { commentsLoader } from "./components/CommentList";
+import CommentList, { commentsLoader } from "./components/comments/CommentList";
 import LoginForm from "./components/login/LoginForm";
 import NotFound from "./components/NotFound";
 import CreateNewThread from "./pages/CreateThread";
 import EditThread from "./pages/EditThread";
 import ErrorPage from "./pages/ErrorPage";
 import ThreadListPage, { threadListLoader } from "./pages/ThreadListPage";
-import ThreadView, { threadViewLoader } from "./pages/ThreadView";
-import { RequireAuth } from "./services/AuthProvider";
+import ThreadView, { threadViewLoader } from "./pages/ThreadDetailPage";
+import { RequireAuth } from "./contexts/AuthProvider";
 
 const router = createBrowserRouter([
     {

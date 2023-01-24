@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/material';
-import ThreadForm from '../components/forms/ThreadForm';
+import ThreadForm from '../components/threads/ThreadForm';
 
 export default function CreateNewThread() {
     return (

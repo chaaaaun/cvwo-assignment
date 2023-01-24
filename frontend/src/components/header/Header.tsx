@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { Link } from "react-router-dom";
-import SearchForm from '../SearchBar';
+import SearchForm from './SearchBar';
 import UserStatus from "./UserStatus";
 
 function Header() {

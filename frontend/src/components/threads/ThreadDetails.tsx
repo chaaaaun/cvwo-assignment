@@ -1,11 +1,11 @@
 import { ArrowBack, Edit, Person } from "@mui/icons-material";
 import { Button, Card, CardContent, Chip, Stack, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ThreadAPI from "../api/ThreadAPI";
-import { useAuth } from "../services/AuthContext";
-import { Thread } from "../types/DataModels";
-import DeleteModal from "./DeleteModal";
-import CommentForm from "./forms/CommentForm";
+import ThreadAPI from "../../api/ThreadAPI";
+import { useAuth } from "../../contexts/AuthContext";
+import { Thread } from "../../types/DataModels";
+import DeleteModal from "../DeleteModal";
+import CommentForm from "../comments/CommentForm";
 import TagList from "./TagList";
 
 function ThreadDetails(props: { thread: Thread }) {

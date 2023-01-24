@@ -3,7 +3,7 @@ import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { threadId } from "worker_threads";
 import CommentAPI from "../../api/CommentAPI";
-import { useAuth } from "../../services/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import theme from "../../theme";
 import { CommentRequest } from "../../types/ApiRequest";
 import { Comment } from "../../types/DataModels";

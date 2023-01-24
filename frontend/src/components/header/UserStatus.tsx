@@ -1,7 +1,7 @@
 import { Add, Person } from "@mui/icons-material";
 import { Button, IconButton, Stack, Typography } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../../services/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import LoginModal from "../login/LoginModal";
 
 function UserStatus() {

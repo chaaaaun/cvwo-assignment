@@ -2,7 +2,7 @@ import { Pagination, Stack, Typography } from '@mui/material';
 import React from 'react';
 import { useLoaderData, useLocation, useNavigate } from 'react-router-dom';
 import ThreadAPI from '../api/ThreadAPI';
-import ThreadList from '../components/ThreadList';
+import ThreadList from '../components/threads/ThreadList';
 import { GetResponse } from '../types/ApiResponse';
 import { Thread } from "../types/DataModels";
 

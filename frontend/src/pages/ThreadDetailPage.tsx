@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import { Outlet } from "react-router";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import ThreadAPI from "../api/ThreadAPI";
-import ThreadDetails from "../components/ThreadDetails";
+import ThreadDetails from "../components/threads/ThreadDetails";
 import { Thread } from "../types/DataModels";
 
 export async function threadViewLoader({ params }: any) {

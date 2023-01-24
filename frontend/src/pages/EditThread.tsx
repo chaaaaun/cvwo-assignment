@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import ThreadForm from '../components/forms/ThreadForm';
+import ThreadForm from '../components/threads/ThreadForm';
 
 export default function EditThread() {
     const { state } = useLocation();

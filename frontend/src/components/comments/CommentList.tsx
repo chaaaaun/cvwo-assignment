@@ -1,9 +1,9 @@
 import { Pagination, Typography } from "@mui/material";
 import { Stack } from "@mui/system";
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
-import CommentAPI from "../api/CommentAPI";
-import { GetResponse } from "../types/ApiResponse";
-import { Comment } from "../types/DataModels";
+import CommentAPI from "../../api/CommentAPI";
+import { GetResponse } from "../../types/ApiResponse";
+import { Comment } from "../../types/DataModels";
 import CommentItem from "./CommentItem";
 
 export async function commentsLoader({ params }: any) {

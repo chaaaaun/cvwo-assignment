@@ -3,7 +3,7 @@ import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
 import { redirect, useLocation, useNavigate } from "react-router-dom";
 import UserAPI from "../../api/UserAPI";
-import { useAuth } from "../../services/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import theme from "../../theme";
 import { UserLoginRequest } from "../../types/ApiRequest";
 import { LoginState, reducer } from "../../types/FormStates";

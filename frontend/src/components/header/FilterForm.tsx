@@ -2,8 +2,8 @@ import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useReducer, useState } from "react";
 import { createSearchParams, useNavigate } from "react-router-dom";
-import theme from "../theme";
-import { reducer, SearchFormState } from "../types/FormStates";
+import theme from "../../theme";
+import { reducer, SearchFormState } from "../../types/FormStates";
 
 export default function FilterForm(props: { query: string, closeFn: VoidFunction }) {
     const navigate = useNavigate();

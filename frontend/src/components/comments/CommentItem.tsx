@@ -2,11 +2,11 @@ import { Edit, Person } from "@mui/icons-material";
 import { Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material";
 import { MouseEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CommentAPI from "../api/CommentAPI";
-import { useAuth } from "../services/AuthContext";
-import { Comment } from "../types/DataModels";
-import DeleteModal from "./DeleteModal";
-import CommentForm from "./forms/CommentForm";
+import CommentAPI from "../../api/CommentAPI";
+import { useAuth } from "../../contexts/AuthContext";
+import { Comment } from "../../types/DataModels";
+import DeleteModal from "../DeleteModal";
+import CommentForm from "./CommentForm";
 
 function CommentItem(props: { comment: Comment }) {
     const navigate = useNavigate();

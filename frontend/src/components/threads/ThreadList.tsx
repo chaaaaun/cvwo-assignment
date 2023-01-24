@@ -3,7 +3,7 @@ import { Card, CardActionArea, CardContent, Chip, Typography } from "@mui/materi
 import Grid2 from "@mui/material/Unstable_Grid2/Grid2";
 import { Stack } from "@mui/system";
 import { useNavigate } from "react-router";
-import { Thread } from "../types/DataModels";
+import { Thread } from "../../types/DataModels";
 import TagList from "./TagList";
 
 function ThreadList(props: { threads: Thread[] }) {
