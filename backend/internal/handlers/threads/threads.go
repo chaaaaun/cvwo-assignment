@@ -114,8 +114,6 @@ func SearchThreads(w http.ResponseWriter, r *http.Request) {
 		order = fmt.Sprintf("%s %s", sort, r.URL.Query().Get("order"))
 	}
 
-	println(filters["user"])
-
 	// Get threads
 	if threads, total, err := dataaccess.DbFilterThreads(page, filters, order); err != nil {
 		render.Render(w, r, api.ErrBadRequest(err))

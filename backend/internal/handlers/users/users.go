@@ -89,31 +89,28 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Authenticate
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), salted); err != nil {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
 
-	// Generate JWT
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.ID,
 		"exp": time.Now().Add(jwtExpiration).Unix(),
 	})
 
-	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
 
-	// Attach JWT to response
 	render.Status(r, http.StatusOK)
 	http.SetCookie(w, &http.Cookie{
 		Name:     "jwt",
 		Path:     "/",
-		SameSite: 2,
+		HttpOnly: true,
+		SameSite: 3,
 		Value:    tokenString,
 		Expires:  time.Now().Add(jwtExpiration),
 	})
