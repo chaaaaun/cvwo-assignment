@@ -13,7 +13,7 @@ import (
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading environment variables")
+		log.Println("No environment files found")
 	}
 
 	if err := database.GetDB(); err != nil {

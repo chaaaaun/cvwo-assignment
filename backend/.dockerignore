@@ -10,7 +10,10 @@ vendor/
 .gcloudignore
 
 # Exclude git history and configuration.
+README.md
 .gitignore
 
-# Exclude dev utilities
+# Exclude dev utilities and environment files
+main
 utils/
+.env

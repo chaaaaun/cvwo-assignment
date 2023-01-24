@@ -3,6 +3,7 @@ package users
 import (
 	"context"
 	"errors"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -99,7 +100,12 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 		"exp": time.Now().Add(jwtExpiration).Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
+	secret := os.Getenv("JWT_SECRET")
+	if secret == "" {
+		log.Fatalln("No JWT secret provided")
+	}
+
+	tokenString, err := token.SignedString([]byte(secret))
 	if err != nil {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return

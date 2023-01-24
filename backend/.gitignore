@@ -1,4 +1,4 @@
-# backend
+# Exclude binaries, env files, and static files
 main
 .env
 /dist

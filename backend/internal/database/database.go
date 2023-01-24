@@ -1,6 +1,7 @@
 package database
 
 import (
+	"log"
 	"os"
 
 	"gorm.io/driver/postgres"
@@ -14,6 +15,9 @@ func GetDB() error {
 	var err error
 	// Opens the connection
 	dsn := os.Getenv("DB_STR")
+	if dsn == "" {
+		log.Fatalln("No connection string provided")
+	}
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{
 		// Logger: logger.Default.LogMode(logger.Info),
 	})

@@ -1,4 +1,4 @@
-# CVWO Web Forum - Frontend
+# Sakura: Frontend
 
 Built with React.js, with helper libraries like `react-router` and `mui`
 
@@ -10,10 +10,10 @@ Installs all necessary dependencies.
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Runs the app in the development mode with hot reloading.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder
+Builds the app for production to the `../backend/dist` folder
 
