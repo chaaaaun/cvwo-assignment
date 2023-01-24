@@ -11,5 +11,5 @@ View instructions to run at the Docker repository.
 
 ## Building from source
 
-View the `README`s respective subdirectories for instructions to build the app from the source code.
+View the `README`s in the respective subdirectories for instructions to build the app from the source code.
 
