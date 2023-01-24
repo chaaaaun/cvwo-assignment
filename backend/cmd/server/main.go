@@ -23,6 +23,10 @@ func init() {
 
 func main() {
 	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8000"
+		log.Printf("defaulting to port %s", port)
+	}
 
 	r := router.Setup()
 
