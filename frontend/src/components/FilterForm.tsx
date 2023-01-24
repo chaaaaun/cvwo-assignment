@@ -1,37 +1,11 @@
 import { ArrowDownward, ArrowUpward } from "@mui/icons-material";
-import { TextField, Button, Typography, FormControl, Select, MenuItem, ToggleButtonGroup, ToggleButton, SelectChangeEvent, LinearProgress, Stack, InputLabel } from "@mui/material";
-import { useState, ChangeEventHandler, FormEventHandler, useReducer } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate, useLocation, createSearchParams } from "react-router-dom";
-import CommentAPI from "../api/CommentAPI";
-import ThreadAPI from "../api/ThreadAPI";
-import { useAuth } from "../services/AuthContext";
+import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, Stack, TextField, ToggleButton, ToggleButtonGroup, Typography } from "@mui/material";
+import { ChangeEventHandler, FormEventHandler, useReducer, useState } from "react";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import theme from "../theme";
-import { CommentRequest, ThreadRequest } from "../types/ApiRequest";
-import { SearchFormState } from "../types/FormStates";
+import { reducer, SearchFormState } from "../types/FormStates";
 
-type ACTIONTYPE =
-    | { type: "field"; fieldName: string; payload: string }
-    | { type: "toggle"; toggleName: string };
-
-function reducer(state: SearchFormState, action: ACTIONTYPE) {
-    switch (action.type) {
-        case "field":
-            return {
-                ...state,
-                [action.fieldName]: action.payload,
-            };
-        case "toggle":
-            return {
-                ...state,
-                [action.toggleName]: !state[action.toggleName as keyof SearchFormState]
-            };
-        default:
-            throw new Error();
-    }
-}
-
-export default function FilterForm(props: { query: string }) {
+export default function FilterForm(props: { query: string, closeFn: VoidFunction }) {
     const navigate = useNavigate();
     // const { pathname } = useLocation();
 
@@ -42,7 +16,7 @@ export default function FilterForm(props: { query: string }) {
         order: "desc",
     }
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer<SearchFormState>, initialState);
     const [error, setError] = useState("");
 
     const onTagsChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -83,6 +57,7 @@ export default function FilterForm(props: { query: string }) {
                 q: props.query
             }).toString()
         })
+        props.closeFn()
     }
 
 

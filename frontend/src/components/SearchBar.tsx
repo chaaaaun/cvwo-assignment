@@ -1,7 +1,8 @@
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, InputAdornment, Modal, TextField } from "@mui/material";
+import { ArrowForward, FilterAlt, Search } from "@mui/icons-material";
+import { Box, IconButton, InputAdornment, Modal, TextField } from "@mui/material";
 import { Stack } from "@mui/system";
-import { ArrowForward, Filter, FilterAlt, Search } from "@mui/icons-material";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, KeyboardEventHandler, useState } from "react";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import FilterForm from "./FilterForm";
 
 const modalStyle = {
@@ -17,6 +18,7 @@ const modalStyle = {
 };
 
 export default function SearchBar() {
+    const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [query, setQuery] = useState("");
 
@@ -28,8 +30,23 @@ export default function SearchBar() {
         setOpen(false);
     };
 
+    const handleSubmit = () => {
+        navigate({
+            pathname: "/threads/1",
+            search: createSearchParams({
+                q: query
+            }).toString()
+        });
+    }
+
     const onQueryChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         setQuery(e.currentTarget.value);
+    }
+
+    const handleKeyPress: KeyboardEventHandler = (e) => {
+        if (e.key === "Enter")  {
+            handleSubmit();
+        }
     }
 
 
@@ -40,6 +57,7 @@ export default function SearchBar() {
                 id="searchbar"
                 placeholder="Search thread titles"
                 onChange={onQueryChange}
+                onKeyDown={handleKeyPress}
                 InputProps={{
                     startAdornment:
                         <InputAdornment position="start">
@@ -48,7 +66,7 @@ export default function SearchBar() {
                     endAdornment:
                         <InputAdornment position="end">
                             {query &&
-                                <IconButton aria-label="search"><ArrowForward /></IconButton>}
+                                <IconButton onClick={handleSubmit}><ArrowForward /></IconButton>}
                         </InputAdornment>
                 }} />
             <IconButton onClick={handleClickOpen} sx={{ alignSelf: "center" }}>
@@ -56,7 +74,7 @@ export default function SearchBar() {
             </IconButton>
             <Modal open={open} onClose={handleClose}>
                 <Box sx={modalStyle}>
-                    <FilterForm query={query} />
+                    <FilterForm query={query} closeFn={handleClose} />
                 </Box>
             </Modal>
         </Stack>

@@ -18,7 +18,7 @@ const initialState: LoginState = {
 };
 
 export default function LoginForm() {
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer<LoginState>, initialState);
     const navigate = useNavigate();
     const location = useLocation();
     const auth = useAuth();

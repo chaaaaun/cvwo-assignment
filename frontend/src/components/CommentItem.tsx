@@ -1,6 +1,7 @@
 import { Edit, Person } from "@mui/icons-material";
 import { Button, Card, CardContent, Divider, Stack, Typography } from "@mui/material";
 import { MouseEventHandler, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CommentAPI from "../api/CommentAPI";
 import { useAuth } from "../services/AuthContext";
 import { Comment } from "../types/DataModels";
@@ -8,6 +9,7 @@ import DeleteModal from "./DeleteModal";
 import CommentForm from "./forms/CommentForm";
 
 function CommentItem(props: { comment: Comment }) {
+    const navigate = useNavigate();
     const auth = useAuth();
 
     const [editing, setEditing] = useState<boolean>(false);
@@ -30,7 +32,10 @@ function CommentItem(props: { comment: Comment }) {
 
     const handleDelete = () => {
         CommentAPI.deleteComment(props.comment.ThreadID, props.comment.ID)
-            .then(() => window.location.reload())
+            .then(() => {
+                navigate("/null");
+                navigate(-1);
+            })
             .catch(err => alert(err));
     }
 

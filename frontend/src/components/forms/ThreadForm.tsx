@@ -5,28 +5,7 @@ import ThreadAPI from "../../api/ThreadAPI";
 import theme from "../../theme";
 import { ThreadRequest } from "../../types/ApiRequest";
 import { Thread } from "../../types/DataModels";
-import { ThreadState } from "../../types/FormStates";
-
-type ACTIONTYPE =
-    | { type: "field"; fieldName: string; payload: string }
-    | { type: "toggle"; toggleName: string };
-
-function reducer(state: ThreadState, action: ACTIONTYPE) {
-    switch (action.type) {
-        case "field":
-            return {
-                ...state,
-                [action.fieldName]: action.payload,
-            };
-        case "toggle":
-            return {
-                ...state,
-                [action.toggleName]: !state[action.toggleName as keyof ThreadState]
-            };
-        default:
-            throw new Error();
-    }
-}
+import { reducer, ThreadState } from "../../types/FormStates";
 
 export default function ThreadForm(props: { thread?: Thread }) {
     const navigate = useNavigate();
@@ -45,7 +24,7 @@ export default function ThreadForm(props: { thread?: Thread }) {
         initialState.tags = props.thread.Tags
     }
 
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer<ThreadState>, initialState);
 
     const onTitleChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
         dispatch({ type: 'field', fieldName: 'title', payload: e.currentTarget.value })

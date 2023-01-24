@@ -16,7 +16,8 @@ type Thread struct {
 	Comments []Comment `json:"Comments,omitempty"`
 	UserID   string
 
-	NumComments int
+	// Read-only alias field for use when querying
+	NumComments int `gorm:"->"`
 }
 
 // Marshals id field which is a uint to string for easier handling in frontend

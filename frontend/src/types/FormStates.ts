@@ -30,7 +30,7 @@ type ACTIONTYPE =
     | { type: "field"; fieldName: string; payload: string }
     | { type: "toggle"; toggleName: string };
 
-export function reducer(state: LoginState, action: ACTIONTYPE) {
+export function reducer<T>(state: T, action: ACTIONTYPE): T {
     switch (action.type) {
         case "field":
             return {
@@ -40,7 +40,7 @@ export function reducer(state: LoginState, action: ACTIONTYPE) {
         case "toggle":
             return {
                 ...state,
-                [action.toggleName]: !state[action.toggleName as keyof LoginState]
+                [action.toggleName]: !state[action.toggleName as keyof T]
             };
         default:
             throw new Error();

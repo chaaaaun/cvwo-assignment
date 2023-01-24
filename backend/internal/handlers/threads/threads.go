@@ -146,9 +146,7 @@ func GetThread(w http.ResponseWriter, r *http.Request) {
 	thread, _ := dataaccess.DbGetThread(id)
 
 	render.Status(r, http.StatusOK)
-	render.JSON(w, r, &api.ThreadResponse{
-		Payload: []models.Thread{*thread},
-	})
+	render.JSON(w, r, *thread)
 }
 
 func CreateThread(w http.ResponseWriter, r *http.Request) {

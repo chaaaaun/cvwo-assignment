@@ -23,8 +23,6 @@ const getThreads = async (page: string) => {
 }
 
 const searchThreads = async (page: string, filters: string) => {
-    console.log(page);
-    
     let res = await fetch(`/api/thread/search?${filters}&` + new URLSearchParams({
         page: page,
     }));
@@ -35,7 +33,7 @@ const searchThreads = async (page: string, filters: string) => {
 const getThreadDetails = async (id: string) => {
     let res = await fetch(`/api/thread/${id}`);
     if (!res.ok) { throw new Error(res.statusText) }
-    return await res.json() as GetResponse<Thread>;
+    return await res.json() as Thread;
 }
 
 const updateThread = async (thread: ThreadRequest, id: string) => {

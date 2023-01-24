@@ -36,7 +36,10 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
                 content: content
             }
             CommentAPI.createComment(comment, props.threadId)
-                .then(() => {navigate(`${pathname}/../1`, { replace: true })})
+                .then(() => {  
+                    navigate("/null");
+                    navigate(-1);
+                })
                 .catch(err => setError(err))
                 .finally(() => setContent(""));
         } else {
@@ -44,7 +47,10 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
                 content: content
             }
             CommentAPI.updateComment(comment, props.threadId, props.comment.ID)
-                .then(() => {navigate(`${pathname}/../1`, { replace: true })})
+                .then(() => {  
+                    navigate("/null");
+                    navigate(-1);
+                })
                 .catch(err => setError(err))
         }
     }
