@@ -69,7 +69,7 @@ function CommentItem(props: { comment: Comment }) {
                     </Stack>
                     {
                         editing
-                            ? <CommentForm threadId={props.comment.ThreadID} comment={props.comment} />
+                            ? <CommentForm threadId={props.comment.ThreadID} comment={props.comment} closeFn={handleEdit} />
                             : <Typography variant="body1">{props.comment.Content}</Typography>
                     }
                 </Stack>

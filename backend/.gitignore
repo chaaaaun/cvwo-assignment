@@ -1,3 +1,4 @@
 # backend
 main
 .env
+/dist

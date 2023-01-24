@@ -1,6 +1,6 @@
 import { Add, Person } from "@mui/icons-material";
-import { Button, IconButton, Stack, Typography } from "@mui/material";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Button, Stack, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import LoginModal from "../login/LoginModal";
 

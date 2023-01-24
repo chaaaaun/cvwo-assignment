@@ -25,6 +25,7 @@ func main() {
 	port := os.Getenv("PORT")
 
 	r := router.Setup()
+
 	fmt.Printf("Listening on port %s", port)
 
 	log.Fatalln(http.ListenAndServe(fmt.Sprintf(":%s", port), r))

@@ -1,14 +1,13 @@
-import { Button, TextField } from "@mui/material";
+import { Alert, Button, TextField } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { threadId } from "worker_threads";
 import CommentAPI from "../../api/CommentAPI";
 import { useAuth } from "../../contexts/AuthContext";
 import theme from "../../theme";
 import { CommentRequest } from "../../types/ApiRequest";
 import { Comment } from "../../types/DataModels";
 
-export default function CommentForm(props: { threadId: string, comment?: Comment }) {
+export default function CommentForm(props: { threadId: string, comment?: Comment, closeFn?: Function }) {
     const navigate = useNavigate();
     const { pathname } = useLocation();
     
@@ -17,7 +16,8 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
             ? props.comment.Content
             : ""
     );
-    const [error, setError] = useState<string>("")
+    const [error, setError] = useState<string>("");
+    const [success, setSuccess] = useState<string>("");
     const auth = useAuth();
 
     const onContentChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -27,6 +27,7 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
     const handleSubmit: FormEventHandler = (event) => {
         event.preventDefault();
         setError("")
+        setSuccess("")
         if (!content) {
             setError("Comment cannot be empty");
             return;
@@ -38,8 +39,8 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
             }
             CommentAPI.createComment(comment, props.threadId)
                 .then(() => {  
-                    navigate("../null");
-                    navigate(-1);
+                    setSuccess("Comment created!");
+                    navigate(`${pathname}/../1`);
                 })
                 .catch(err => setError(err))
                 .finally(() => setContent(""));
@@ -48,9 +49,11 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
                 content: content
             }
             CommentAPI.updateComment(comment, props.threadId, props.comment.ID)
-                .then(() => {  
-                    navigate("/null");
-                    navigate(-1);
+                .then(() => {                      
+                    navigate(`${pathname}/../1`);
+                    if (props.closeFn) {
+                        props.closeFn();
+                    }
                 })
                 .catch(err => setError(err))
         }
@@ -58,6 +61,9 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
 
     return (
         <form>
+            {
+                success && <Alert severity="success">{success}</Alert>
+            }
             <TextField fullWidth onChange={onContentChange}
                 value={content}
                 id="content-field"

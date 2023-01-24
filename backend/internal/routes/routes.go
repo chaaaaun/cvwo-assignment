@@ -1,7 +1,6 @@
 package routes
 
 import (
-	"net/http"
 	"os"
 
 	"github.com/chauuun/cvwo-assignment/backend/internal/handlers/comments"
@@ -13,11 +12,6 @@ import (
 
 func GetPublicRoutes() func(r chi.Router) {
 	return func(r chi.Router) {
-		r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			// TODO: serve static files here
-			w.Write([]byte("welcome anonymous"))
-		})
-
 		r.Route("/api/user", func(r chi.Router) {
 			r.Post("/login", users.AuthenticateUser)
 			r.Post("/register", users.CreateUser)

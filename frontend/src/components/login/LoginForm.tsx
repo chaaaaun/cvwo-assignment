@@ -1,4 +1,3 @@
-import { Check } from "@mui/icons-material";
 import { Alert, Button, Link, TextField, Typography } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, MouseEventHandler, useReducer } from "react";
 import { redirect, useLocation, useNavigate } from "react-router-dom";
@@ -25,7 +24,7 @@ export default function LoginForm() {
     const from = location.state?.from?.pathname || "/";
 
     if (auth.user) {
-        redirect("/")
+        redirect("/");
     }
 
     const onUsernameChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
