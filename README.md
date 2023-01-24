@@ -2,18 +2,12 @@
 
 Built for the Computing for Voluntary Welfare Organisations (CVWO) AY2022/23 application by **Tu Jia En (A0252321W)**.
 
+A live version of the app is available [here](https://sakura-4toqz6jphq-as.a.run.app), deployed with Google Cloud Run.
+
 ## Running from Docker image
 
 Prebuilt Docker images are available on [Docker Hub](https://hub.docker.com/r/chauuun/golang-sakura).
-
-Simply pull any image with 
-```
-docker pull chauuun/golang-sakura
-``` 
-Then spin up a container, supplying the following environment variables:
-- `JWT_SECRET`: Secret for the app to generate JWT tokens
-- `DB_STR`: Your local or remote database connection string
-- `PORT`: optional, defaults to `8000`
+View instructions to run at the Docker repository.
 
 ## Building from source
 

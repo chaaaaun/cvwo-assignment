@@ -40,7 +40,7 @@ function ThreadDetails(props: { thread: Thread }) {
                         }
                     </Stack>
                     <TagList tags={props.thread.Tags} size="medium" />
-                    <Typography variant="h3">{props.thread.Title}</Typography>
+                    <Typography variant="h3" maxWidth="100%" sx={{ wordBreak: "break-word" }}>{props.thread.Title}</Typography>
                     <Typography variant="body1">{props.thread.Content}</Typography>
                     <Stack direction='row' justifyContent='end' spacing={0.5} marginBottom={3}>
                         <Stack spacing={0} alignItems='end'>
