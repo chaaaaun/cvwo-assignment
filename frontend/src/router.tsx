@@ -20,7 +20,6 @@ const router = createBrowserRouter([
                 path: "threads/:page",
                 element: <ThreadListPage />,
                 loader: threadListLoader,
-                errorElement: <ErrorPage />,
             },
             {
                 path: "thread/:id",

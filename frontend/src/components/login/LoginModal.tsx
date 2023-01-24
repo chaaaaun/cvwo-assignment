@@ -21,7 +21,7 @@ export default function LoginModal() {
 
     return (
         <div>
-            <Button onClick={handleOpen}>Log In</Button>
+            <Button variant="contained" onClick={handleOpen}>Log In</Button>
             <Modal
                 open={open}
                 onClose={handleClose}

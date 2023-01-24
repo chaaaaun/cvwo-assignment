@@ -20,7 +20,7 @@ import (
 const (
 	// Cost for generating bcrypt hash
 	passwordCost int = 10
-	// 3 days for expiration of jwt token
+	// 3 days for JWT token expiration
 	jwtExpiration time.Duration = time.Hour * 24 * 3
 )
 
@@ -38,12 +38,14 @@ func UserCtx(next http.Handler) http.Handler {
 	})
 }
 
+// Retrieves currently authenticated user from context
 func GetCurrentUser(w http.ResponseWriter, r *http.Request) {
 	user := r.Context().Value(models.UserContextKey{}).(string)
 	render.Status(r, http.StatusOK)
 	render.JSON(w, r, &api.UserResponse{User: user})
 }
 
+// Generates password to insert user into DB
 func CreateUser(w http.ResponseWriter, r *http.Request) {
 	// Bind request body
 	data := &models.User{}
@@ -54,12 +56,12 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Encrypt password
 	salted := []byte(data.Password + data.ID)
-	hashed, err := bcrypt.GenerateFromPassword(salted, passwordCost)
-	if err != nil {
+	if hashed, err := bcrypt.GenerateFromPassword(salted, passwordCost); err != nil {
 		render.Render(w, r, api.ErrBadRequest(err))
 		return
+	} else {
+		data.Password = string(hashed[:])
 	}
-	data.Password = string(hashed[:])
 
 	// Create User
 	if err := dataaccess.DbCreateUser(data); err != nil {
@@ -67,10 +69,10 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Return success
 	render.Status(r, http.StatusCreated)
 }
 
+// Checks user supplied pasword against password in DB, generates JWT on success
 func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 	// Bind request body
 	data := &models.User{}
@@ -93,7 +95,7 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Generate jwt
+	// Generate JWT
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"sub": user.ID,
 		"exp": time.Now().Add(jwtExpiration).Unix(),
@@ -101,29 +103,18 @@ func AuthenticateUser(w http.ResponseWriter, r *http.Request) {
 
 	// Sign and get the complete encoded token as a string using the secret
 	tokenString, err := token.SignedString([]byte(os.Getenv("JWT_SECRET")))
-
 	if err != nil {
 		render.Render(w, r, api.ErrUnprocessable(err))
 		return
 	}
 
-	atCookie := http.Cookie{
+	// Attach JWT to response
+	render.Status(r, http.StatusOK)
+	http.SetCookie(w, &http.Cookie{
 		Name:     "jwt",
 		Path:     "/",
 		SameSite: 2,
 		Value:    tokenString,
 		Expires:  time.Now().Add(jwtExpiration),
-	}
-
-	// Return success
-	render.Status(r, http.StatusOK)
-	http.SetCookie(w, &atCookie)
-}
-
-func UpdateUserPassword(w http.ResponseWriter, r *http.Request) {
-	data := &api.ChangePasswordRequest{}
-	if err := render.Bind(r, data); err != nil {
-		render.Render(w, r, api.ErrBadRequest(err))
-		return
-	}
+	})
 }

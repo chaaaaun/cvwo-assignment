@@ -25,3 +25,24 @@ export type SearchFormState = {
     sort: string;
     order: "asc" | "desc";
 }
+
+type ACTIONTYPE =
+    | { type: "field"; fieldName: string; payload: string }
+    | { type: "toggle"; toggleName: string };
+
+export function reducer(state: LoginState, action: ACTIONTYPE) {
+    switch (action.type) {
+        case "field":
+            return {
+                ...state,
+                [action.fieldName]: action.payload,
+            };
+        case "toggle":
+            return {
+                ...state,
+                [action.toggleName]: !state[action.toggleName as keyof LoginState]
+            };
+        default:
+            throw new Error();
+    }
+}

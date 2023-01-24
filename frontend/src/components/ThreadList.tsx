@@ -22,7 +22,7 @@ function ThreadList(props: { threads: Thread[] }) {
                                     <TagList tags={thread.Tags} size="small" />
                                     <Typography variant="h5" component="div">{thread.Title}</Typography>
                                     <Stack direction='row' spacing={0.5}>
-                                        <Chip variant='outlined' sx={{ border: "none" }} icon={<Comment />} label={thread.Comments ? thread.Comments.length : 0} />
+                                        <Chip variant='outlined' sx={{ border: "none" }} icon={<Comment />} label={thread.NumComments} />
                                         <Chip variant='outlined' sx={{ border: "none" }} icon={<Visibility />} label={thread.Views} />
                                     </Stack>
                                 </Stack>

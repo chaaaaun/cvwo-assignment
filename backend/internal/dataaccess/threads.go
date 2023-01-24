@@ -35,8 +35,9 @@ func DbListThreads(page int) (*[]models.Thread, int, error) {
 		return nil, 0, errors.New("page out of range")
 	}
 
-	// Get only necessary info
-	selection := []string{"id", "created_at", "updated_at", "title", "views", "tags", "user_id"}
+	// Get only necessary columns, including alias for comment count
+	selection := []string{"id", "created_at", "updated_at", "title", "views", "tags", "user_id",
+		`(select count(*) from "comments" c where c.thread_id = "threads"."id") as num_comments`}
 	database.DB.Limit(10).Offset(offset).Select(selection).Order("updated_at desc").Find(&threads)
 
 	return &threads, int(totalPages), nil
@@ -46,7 +47,9 @@ func DbFilterThreads(page int, filters map[string]string, order string) (*[]mode
 	var threads []models.Thread
 	// Get 10 entries with page offset
 	offset := (page - 1) * 10
-	selection := []string{"id", "created_at", "updated_at", "title", "views", "tags", "user_id"}
+	// Get only necessary columns, including alias for comment count
+	selection := []string{"id", "created_at", "updated_at", "title", "views", "tags", "user_id",
+		`(select count(*) from "comments" c where c.thread_id = "threads"."id") as num_comments`}
 	chain := database.DB.Limit(10).Offset(offset).Select(selection).Order(order)
 
 	if query, exists := filters["query"]; exists {

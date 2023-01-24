@@ -9,6 +9,7 @@ export type Thread = {
     Tags: string;
     Comments: number[] | null;
     UserID: string;
+    NumComments: number
 }
 
 export type Comment = {

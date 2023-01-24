@@ -6,7 +6,7 @@ import UserAPI from "../../api/UserAPI";
 import { useAuth } from "../../services/AuthContext";
 import theme from "../../theme";
 import { UserLoginRequest } from "../../types/ApiRequest";
-import { LoginState } from "../../types/FormStates";
+import { LoginState, reducer } from "../../types/FormStates";
 
 const initialState: LoginState = {
     username: "",
@@ -16,27 +16,6 @@ const initialState: LoginState = {
     error: "",
     successMsg: ""
 };
-
-type ACTIONTYPE =
-    | { type: "field"; fieldName: string; payload: string }
-    | { type: "toggle"; toggleName: string };
-
-function reducer(state: LoginState, action: ACTIONTYPE) {
-    switch (action.type) {
-        case "field":
-            return {
-                ...state,
-                [action.fieldName]: action.payload,
-            };
-        case "toggle":
-            return {
-                ...state,
-                [action.toggleName]: !state[action.toggleName as keyof LoginState]
-            };
-        default:
-            throw new Error();
-    }
-}
 
 export default function LoginForm() {
     const [state, dispatch] = useReducer(reducer, initialState);
@@ -76,6 +55,7 @@ export default function LoginForm() {
             return;
         }
 
+        dispatch({ type: 'field', fieldName: 'successMsg', payload: '' })
         dispatch({ type: 'field', fieldName: 'error', payload: '' })
         dispatch({ type: 'toggle', toggleName: 'isFetching' })
 
@@ -114,7 +94,11 @@ export default function LoginForm() {
             <Typography variant="h4" mb={1}>{state.isLogin ? "Log In" : "Register"}</Typography>
             {
                 state.successMsg &&
-                    <Alert icon={<Check fontSize="inherit" />}  severity="success">{state.successMsg}</Alert>
+                    <Alert severity="success">{state.successMsg}</Alert>
+            }
+            {
+                state.error &&
+                    <Alert severity="error">{`${state.error}`}</Alert>
             }
             <TextField fullWidth onChange={onUsernameChange}
                 value={state.username}
@@ -123,6 +107,10 @@ export default function LoginForm() {
                 variant="outlined"
                 margin="dense"
                 error={state.error !== ""}
+                inputProps={{
+                    minLength: 3,
+                    maxLength: 50
+                }}
             />
             <TextField fullWidth onChange={onPasswordChange}
                 value={state.password}
@@ -132,8 +120,11 @@ export default function LoginForm() {
                 autoComplete="current-password"
                 margin="dense"
                 error={state.error !== ""}
+                inputProps={{
+                    minLength: 8,
+                    maxLength: 40
+                }}
             />
-            <Typography variant="subtitle1" color="error">{`${state.error}`}</Typography>
             {
                 state.isFetching
                     ? <Button fullWidth variant="contained" disabled>Please Wait</Button>

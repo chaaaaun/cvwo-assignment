@@ -13,8 +13,10 @@ type Thread struct {
 	Content  string
 	Views    int
 	Tags     string
-	Comments []Comment
+	Comments []Comment `json:"Comments,omitempty"`
 	UserID   string
+
+	NumComments int
 }
 
 // Marshals id field which is a uint to string for easier handling in frontend

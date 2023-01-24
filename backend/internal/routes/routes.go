@@ -45,7 +45,6 @@ func GetProtectedRoutes() func(r chi.Router) {
 		// User CRUD
 		r.Route("/api/auth/user", func(r chi.Router) {
 			r.Get("/", users.GetCurrentUser)
-			r.Post("/", users.UpdateUserPassword)
 		})
 
 		r.Route("/api/auth/thread", func(r chi.Router) {
