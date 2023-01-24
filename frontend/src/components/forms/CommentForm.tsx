@@ -1,6 +1,7 @@
 import { Button, TextField } from "@mui/material";
 import { ChangeEventHandler, FormEventHandler, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { threadId } from "worker_threads";
 import CommentAPI from "../../api/CommentAPI";
 import { useAuth } from "../../services/AuthContext";
 import theme from "../../theme";
@@ -37,7 +38,7 @@ export default function CommentForm(props: { threadId: string, comment?: Comment
             }
             CommentAPI.createComment(comment, props.threadId)
                 .then(() => {  
-                    navigate("/null");
+                    navigate("../null");
                     navigate(-1);
                 })
                 .catch(err => setError(err))

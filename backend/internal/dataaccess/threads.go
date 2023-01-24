@@ -14,9 +14,19 @@ import (
 // Retreives thread by ID
 func DbGetThread(id int) (*models.Thread, error) {
 	var thread models.Thread
-	database.DB.First(&thread, id)
-	database.DB.Model(&thread).Update("views", gorm.Expr("views + ?", 1))
+	if result := database.DB.First(&thread, id); result.Error != nil {
+		return nil, result.Error
+	}
 	return &thread, nil
+}
+
+func DbUpdateThreadViews(id int) error {
+	var thread models.Thread
+	thread.ID = uint(id)
+	if result := database.DB.Model(&thread).Update("views", gorm.Expr("views + ?", 1)); result.Error != nil {
+		return result.Error
+	}
+	return nil
 }
 
 func DbListThreads(page int) (*[]models.Thread, int, error) {

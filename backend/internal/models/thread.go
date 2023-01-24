@@ -33,11 +33,3 @@ func (thread *Thread) MarshalJSON() ([]byte, error) {
 }
 
 type ThreadContextKey struct{}
-
-type SearchFilters struct {
-	Query   string
-	Tags    string
-	UserID  string
-	SortCol string
-	Order   string
-}

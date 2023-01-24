@@ -144,9 +144,12 @@ func GetThread(w http.ResponseWriter, r *http.Request) {
 	}
 
 	thread, _ := dataaccess.DbGetThread(id)
+	if err := dataaccess.DbUpdateThreadViews(id); err != nil {
+		render.Render(w, r, api.ErrUnprocessable(errors.New("invalid ID")))
+	}
 
 	render.Status(r, http.StatusOK)
-	render.JSON(w, r, *thread)
+	render.JSON(w, r, thread)
 }
 
 func CreateThread(w http.ResponseWriter, r *http.Request) {

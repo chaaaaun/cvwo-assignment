@@ -86,7 +86,6 @@ func CreateComment(w http.ResponseWriter, r *http.Request) {
 	// Get context info
 	user := r.Context().Value(models.UserContextKey{}).(string)
 	thread := r.Context().Value(models.ThreadContextKey{}).(*models.Thread)
-
 	// Bind request body
 	data := &api.CommentRequest{}
 	if err := render.Bind(r, data); err != nil {
