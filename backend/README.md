@@ -16,4 +16,4 @@ You may want to use your favourite file watcher library (like `CompileDaemon`).
 
 ### `go build ./cmd/server/main.go`
 
-Builds the app for production to the `../backend/dist` folder
+Builds the app into an executable.
